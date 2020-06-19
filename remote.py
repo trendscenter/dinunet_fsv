@@ -7,6 +7,7 @@ from itertools import repeat
 import numpy as np
 import pydevd_pycharm
 
+import core.utils as utils
 from core.measurements import Prf1a, Avg
 
 pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
@@ -32,7 +33,7 @@ def init_nn_params(cache):
     out['input_size'] = 66
     out['hidden_sizes'] = [16, 8, 4, 2]
     out['num_class'] = 2
-    out['epochs'] = 5
+    out['epochs'] = 11
     out['learning_rate'] = 0.001
     cache['batch_size'] = 32
     return out
@@ -45,15 +46,19 @@ def generate_folds(cache, input):
     cache['folds'] = list(zip(*folds))
 
 
-def next_run(cache):
+def next_run(cache, state):
     seed = 244627
+
+    fold = dict(cache['folds'].pop())
+    log_dir = '_'.join([str(s) for s in set(f for _, (f, _) in fold.items())])
+    cache.update(log_dir=state['outputDirectory'] + os.sep + log_dir)
+    os.makedirs(cache['log_dir'], exist_ok=True)
 
     cache.update(best_val_score=0)
     cache.update(train_log=['Loss,Precision,Recall,F1,Accuracy'],
                  validation_log=['Loss,Precision,Recall,F1,Accuracy'],
                  test_log=['Loss,Precision,Recall,F1,Accuracy'])
 
-    fold = dict(cache['folds'].pop())
     train_lens = dict([(site, ln[1]) for site, ln in fold.items()])
     itr = sum(train_lens.values()) / cache['batch_size']
     batch_sizes = {}
@@ -111,6 +116,7 @@ def save_test_scores(cache, input):
         test_prfa.update(tp=vp['tp'], tn=vp['tn'], fn=vp['fn'], fp=vp['fp'])
     cache['test_log'].append([test_loss.average, *test_prfa.prfa()])
     cache['test_scores'] = json.dumps(vars(test_prfa))
+    utils.save_logs(cache, plot_keys=['train_log', 'validation_log'], file_keys=['test_log', 'test_scores'])
 
 
 def set_mode(input, mode=None):
@@ -131,7 +137,7 @@ if __name__ == "__main__":
     if check(all, 'phase', 'init_runs', input):
         out['nn'] = init_nn_params(cache)
         generate_folds(cache, input)
-        out['run'] = next_run(cache)
+        out['run'] = next_run(cache, state)
         out['global_modes'] = set_mode(input)
         nxt_phase = 'init_nn'
 
@@ -155,7 +161,8 @@ if __name__ == "__main__":
     if check(all, 'phase', 'next_run_waiting', input):
         if len(cache['folds']) > 0:
             save_test_scores(cache, input)
-            out['run'] = next_run(cache)
+            out['nn'] = {}
+            out['run'] = next_run(cache, state)
             out['global_modes'] = set_mode(input)
             nxt_phase = 'init_nn'
         else:

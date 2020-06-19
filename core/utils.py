@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 import json
 import os
+from os import sep
 
 import matplotlib.pyplot as plt
 import pandas as pd
-import torch.nn as nn
-from sklearn.preprocessing import MinMaxScaler
 import torch
-from os import sep
-
-plt.switch_backend('agg')
-plt.rcParams["figure.figsize"] = [16, 9]
+import torch.nn as nn
 
 
 def save_checkpoint(cache, model, optimizer, id):
@@ -25,6 +21,9 @@ def load_checkpoint(cache, model, optimizer, id):
 
 
 def save_logs(cache, plot_keys=[], file_keys=[], num_points=51):
+    plt.switch_backend('agg')
+    plt.rcParams["figure.figsize"] = [16, 9]
+    from sklearn.preprocessing import MinMaxScaler
     scaler = MinMaxScaler()
     for k in plot_keys:
         data = cache.get(k, [])
@@ -52,7 +51,7 @@ def save_logs(cache, plot_keys=[], file_keys=[], num_points=51):
     for fk in file_keys:
         with open(cache['log_dir'] + os.sep + f'{fk}.csv', 'w') as file:
             for line in cache[fk] if any(isinstance(ln, list)
-                                                 for ln in cache[fk]) else [cache[fk]]:
+                                         for ln in cache[fk]) else [cache[fk]]:
                 if isinstance(line, list):
                     file.write(','.join([str(s) for s in line]) + '\n')
                 else:

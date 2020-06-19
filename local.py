@@ -89,9 +89,9 @@ if __name__ == "__main__":
         cache.update(**input['nn'], **input['run'][state['clientId']], epoch=0, cursor=0, train_log=[])
         cache['split_file'] = cache['splits'][cache['split_ix']]
         cache['log_dir'] = state['outputDirectory'] + sep + cache['split_file'].split('.')[0]
+        os.makedirs(cache['log_dir'], exist_ok=True)
         cache['current_nn_state'] = 'current.nn.pt'
         cache['best_nn_state'] = 'best.nn.pt'
-        os.makedirs(cache['log_dir'], exist_ok=True)
         nn = init_nn(cache, init_weights=True)
         utils.save_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['current_nn_state'])
         init_dataset(cache, state)
