@@ -65,6 +65,10 @@ def set_mode(input, mode=None):
     return out
 
 
+def save_test_scores():
+    pass
+
+
 if __name__ == "__main__":
     args = json.loads(sys.stdin.read())
     cache = args['cache']
@@ -74,6 +78,8 @@ if __name__ == "__main__":
 
     nxt_phase = input.get('phase', 'init_runs')
     if check(all, 'phase', 'init_runs', input):
+        cache.update(train_log=['Loss,Precision,Recall,F1,Accuracy'],
+                     validation_log=['Loss,Precision,Recall,F1,Accuracy'])
         out['nn'] = init_nn_params()
         generate_folds(cache, input)
         out['run'] = next_run(cache, input)
@@ -94,6 +100,7 @@ if __name__ == "__main__":
             out['global_modes'] = set_mode(input, mode='train')
 
         if check(all, 'mode', 'test', input):
+            out.update(**on_epoch_end())
             out['global_modes'] = set_mode(input, mode='test')
 
     if check(all, 'phase', 'next_run_waiting', input):
