@@ -1,107 +1,109 @@
-# !/usr/bin/python
-#
-# import pydevd_pycharm
-#
-# pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
-
+#!/usr/bin/python
 import json
 import os
 import sys
 
 import numpy as np
+import pydevd_pycharm
 
-from core.measurements import Prf1a
-from core.utils import Cache, save_logs
-
-
-def init(cache, inputs, state):
-    cache.set(best_val_score=0, validation_log=['Precision,Recall,F1,Accuracy'],
-              test_log=['Precision,Recall,F1,Accuracy'])
-    log_dir = state['outputDirectory'] + os.sep + '_'.join(
-        set([site_vars['experiment'] + str(site_vars.get('which_k_fold', '')) for _, site_vars in inputs.items()]))
-    os.makedirs(log_dir, exist_ok=True)
-    cache.set(log_dir=log_dir)
-    cache.set(num_sites=len(inputs))
-    cache.set(init=True)
+pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
 
 
-def aggregate_scores(inputs, key):
-    scores = []
-    for site, site_vars in inputs.items():
-        scores.append(site_vars[key])
-    tp, tn, fp, fn = np.array(scores).sum(0).tolist()
-    score = Prf1a()
-    score.add(tp=tp, tn=tn, fn=fn, fp=fp)
-    return score
-
-
-def aggregate_sites_grad(input, sites_nn_state):
+def aggregate_sites_grad(input):
+    out = {}
     grads = []
     for site, site_vars in input.items():
-        if site_vars['mode'] == 'train':
-            grad_file = state['baseDirectory'] + os.sep + site + os.sep + site_vars['grad_file']
-            grad = np.load(grad_file, allow_pickle=True)
-            grads.append(grad)
-            sites_nn_state['mode'] = 'train'
-
+        grad_file = state['baseDirectory'] + os.sep + site + os.sep + site_vars['grads_file']
+        grad = np.load(grad_file, allow_pickle=True)
+        grads.append(grad)
+    out['avg_grads_file'] = 'avg_grads.npy'
     avg_grads = []
     for layer_grad in zip(*grads):
         avg_grads.append(np.array(layer_grad).mean(0))
-    return avg_grads
+    np.save(state['transferDirectory'] + os.sep + out['avg_grads_file'], np.array(avg_grads))
+    return out
+
+
+def on_epoch_end():
+    out = {}
+    return out
+
+
+def init_nn_params():
+    out = {}
+    out['input_size'] = 66
+    out['hidden_sizes'] = [16, 8, 4, 2]
+    out['num_class'] = 2
+    out['epochs'] = 11
+    out['learning_rate'] = 0.001
+    return out
+
+
+def generate_folds(cache, input):
+    cache['folds'] = list(zip(*[site['splits'] for _, site in input.items()]))
+
+
+def next_run(cache, input):
+    out = {}
+    out['fold'] = set(cache['folds'].pop()).pop()
+    out['seed'] = 244627
+    out['batch_size'] = 16  # Todo
+    return out
+
+
+def check(logic, k, v, input):
+    phases = []
+    for site_vars in input.values():
+        phases.append(site_vars.get(k) == v)
+    return logic(phases)
+
+
+def set_mode(input, mode=None):
+    out = {}
+    for site, site_vars in input.items():
+        out[site] = mode if mode else site_vars['mode']
+    return out
 
 
 if __name__ == "__main__":
     args = json.loads(sys.stdin.read())
-
+    cache = args['cache']
     input = args['input']
     state = args['state']
-    cache = Cache(args, with_input=False)
+    out = {}
 
-    init(cache, input, state)
+    nxt_phase = input.get('phase', 'init_runs')
+    if check(all, 'phase', 'init_runs', input):
+        out['nn'] = init_nn_params()
+        generate_folds(cache, input)
+        out['run'] = next_run(cache, input)
+        nxt_phase = 'init_nn'
+        out['global_modes'] = set_mode(input)
 
-    sites_nn_state = {}
-    for site, site_vars in input.items():
-        sites_nn_state[site] = {'iteration': site_vars['iteration'], 'epoch': site_vars['epoch'],
-                                'epochs': site_vars['epochs'], 'mode': site_vars['mode']}
+    if check(all, 'phase', 'computation', input):
+        nxt_phase = 'computation'
+        if check(any, 'mode', 'train', input):
+            out.update(**aggregate_sites_grad(input))
+            out['global_modes'] = set_mode(input)
 
-    output = {}
+        if check(all, 'mode', 'val_waiting', input):
+            out['global_modes'] = set_mode(input, mode='validation')
 
-    val_waiting = [site_vars['mode'] == 'validation_waiting' for _, site_vars in input.items()]
-    success = [site_vars.get('success', False) for _, site_vars in input.items()]
-    train_waiting = [site_vars['mode'] == 'train_waiting' for _, site_vars in input.items()]
-    test = [site_vars['mode'] == 'test' for _, site_vars in input.items()]
-    train = [site_vars['mode'] == 'train' for _, site_vars in input.items()]
+        if check(all, 'mode', 'train_waiting', input):
+            out.update(**on_epoch_end())
+            out['global_modes'] = set_mode(input, mode='train')
 
-    if all(success):
-        output['success'] = True
-        output['test_prf1a'] = dict([(site, site_vars['test_prf1a']) for site, site_vars in input.items()])
-        score = aggregate_scores(input, key='test_scores')
-        cache['test_log'].append(score.prfa())
-        cache['test_scores'] = [score.tp, score.tn, score.fp, score.fn]
-        save_logs(cache, plot_keys=['validation_log'], file_keys=['test_log', 'test_scores'])
+        if check(all, 'mode', 'test', input):
+            out['global_modes'] = set_mode(input, mode='test')
 
-    elif all(val_waiting):
-        for site, _ in input.items():
-            sites_nn_state[site]['mode'] = 'validation'
+    if check(all, 'phase', 'next_run_waiting', input):
+        if len(cache['folds']) > 0:
+            out['run'] = next_run(cache, input)
+            nxt_phase = 'init_nn'
+            out['global_modes'] = set_mode(input)
+        else:
+            out['phase'] = 'success'
 
-    elif all(train_waiting):
-        for site, site_vars in input.items():
-            sites_nn_state[site]['mode'] = 'train'
-        score = aggregate_scores(input, 'validation_scores')
-        cache['validation_log'].append(score.prfa())
-        if score.f1 > cache['best_val_score']:
-            output['save_best_model'] = True
-            cache.update(best_val_score=score.f1)
-
-    elif any(train):
-        avg_grads = aggregate_sites_grad(input, sites_nn_state)
-        output['avg_grad_file'] = 'avg_grad.npy'
-        np.save(state['transferDirectory'] + os.sep + output['avg_grad_file'], np.array(avg_grads))
-
-    elif all(test):
-        output['mode'] = 'test'
-
-    output['global_nn_state'] = sites_nn_state
-
-    output = json.dumps({'output': output, 'cache': cache, 'success': output.get('success', False)})
+    out['phase'] = nxt_phase
+    output = json.dumps({'output': out, 'cache': cache, 'success': check(all, 'phase', 'success', input)})
     sys.stdout.write(output)

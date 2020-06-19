@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/mscnn_vbm.iml" filepath="$PROJECT_DIR$/.idea/mscnn_vbm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/dinunet.iml" filepath="$PROJECT_DIR$/.idea/dinunet.iml" />
     </modules>
   </component>
 </project>

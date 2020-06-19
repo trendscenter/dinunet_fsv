@@ -6,39 +6,28 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import torch.nn as nn
 from sklearn.preprocessing import MinMaxScaler
+import torch
+from os import sep
 
 plt.switch_backend('agg')
 plt.rcParams["figure.figsize"] = [16, 9]
 
 
-class Cache(dict):
-    def __init__(self, args, with_input=True):
-        super().__init__(args.get("cache", {}))
-        if with_input and self.__len__() == 0:
-            self.update(**args.get("input", {}))
-
-    def set(self, **kw):
-        self.update(dict([(k, v) for k, v in kw.items() if k not in self.keys()]))
+def save_checkpoint(cache, model, optimizer, name):
+    chk = {'model_state_dict': model.state_dict(), 'optimizer_state_dict': optimizer.state_dict()}
+    torch.save(chk, cache['log_dir'] + sep + name)
 
 
-def grab(kv, key, validate_scope=True):
-    items = {}
-    for k, v in kv.items():
-        if items.get(v[key]):
-            items[v[key]].append(k)
-        else:
-            items[v[key]] = [k]
-
-    for k, v in items.items():
-        items[k] = len(kv) == len(v) if validate_scope else len(v) > 0
-
-    return items
+def load_checkpoint(cache, model, optimizer, name):
+    checkpoint = torch.load(cache['log_dir'] + sep + name)
+    model.load_state_dict(checkpoint['model_state_dict'])
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
 
 
 def save_logs(cache, plot_keys=[], file_keys=[], num_points=51):
     scaler = MinMaxScaler()
     for k in plot_keys:
-        data = cache.get(k, [])
+        data = cache['logs'].get(k, [])
 
         if len(data) == 0:
             continue
@@ -52,9 +41,9 @@ def save_logs(cache, plot_keys=[], file_keys=[], num_points=51):
             if max(df[col]) > 1:
                 df[col] = scaler.fit_transform(df[[col]])
 
-        rollin_window = df.shape[0] // num_points + 1
+        rollin_window = max(df.shape[0] // num_points + 1, 3)
         rolling = df.rolling(rollin_window, min_periods=1).mean()
-        ax = df.plot(x_compat=True, alpha=0.2, legend=0)
+        ax = df.plot(x_compat=True, alpha=0.1, legend=0)
         rolling.plot(ax=ax, title=k.upper())
 
         plt.savefig(cache['log_dir'] + os.sep + k + '.png')
@@ -62,7 +51,8 @@ def save_logs(cache, plot_keys=[], file_keys=[], num_points=51):
 
     for fk in file_keys:
         with open(cache['log_dir'] + os.sep + f'{fk}.csv', 'w') as file:
-            for line in cache[fk] if any(isinstance(ln, list) for ln in cache[fk]) else [cache[fk]]:
+            for line in cache['logs'][fk] if any(isinstance(ln, list)
+                                                 for ln in cache['logs'][fk]) else [cache['logs'][fk]]:
                 if isinstance(line, list):
                     file.write(','.join([str(s) for s in line]) + '\n')
                 else:
