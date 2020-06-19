@@ -86,38 +86,39 @@ if __name__ == "__main__":
             out['splits'][i] = len(sp['train'])
 
     if nxt_phase == 'init_nn':
-        cache.update(**input['nn'], **input['run'], epoch=0, cursor=0, train_log=[])
-        cache['split_file'] = cache['splits'][cache['fold']]
+        cache.update(**input['nn'], **input['run'][state['clientId']], epoch=0, cursor=0, train_log=[])
+        cache['split_file'] = cache['splits'][cache['split_ix']]
         cache['log_dir'] = state['outputDirectory'] + sep + cache['split_file'].split('.')[0]
         cache['current_nn_state'] = 'current.nn.pt'
         cache['best_nn_state'] = 'best.nn.pt'
         os.makedirs(cache['log_dir'], exist_ok=True)
         nn = init_nn(cache, init_weights=True)
-        utils.save_checkpoint(cache, nn['model'], nn['optimizer'], name=cache['current_nn_state'])
+        utils.save_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['current_nn_state'])
         init_dataset(cache, state)
         nxt_phase = 'computation'
 
     if nxt_phase == 'computation':
         nn = init_nn(cache, init_weights=False)
         out['mode'] = input['global_modes'].get(state['clientId'], cache['mode'])
+
         if input.get('save_current_as_best'):
-            utils.load_checkpoint(cache, nn['model'], nn['optimizer'], name=cache['current_nn_state'])
-            utils.save_checkpoint(cache, nn['model'], nn['optimizer'], name=cache['best_nn_state'])
+            utils.load_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['current_nn_state'])
+            utils.save_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['best_nn_state'])
 
         if out['mode'] in ['train', 'val_waiting']:
-            utils.load_checkpoint(cache, nn['model'], nn['optimizer'], name=cache['current_nn_state'])
+            utils.load_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['current_nn_state'])
             out.update(**train(cache, input, state, nn['model'], nn['optimizer'], device=nn['device']))
-            utils.save_checkpoint(cache, nn['model'], nn['optimizer'], name=cache['current_nn_state'])
+            utils.save_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['current_nn_state'])
             out.update(**next_iter(cache))
 
-        if out['mode'] == 'validation':
-            utils.load_checkpoint(cache, nn['model'], nn['optimizer'], name=cache['current_nn_state'])
+        elif out['mode'] == 'validation':
+            utils.load_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['current_nn_state'])
             avg, scores = evaluation(cache, state, nn['model'], split_key='validation', device=nn['device'])
             out['validation_log'] = [vars(avg), vars(scores)]
             out.update(**next_epoch(cache))
 
-        if out['mode'] == 'test':
-            utils.load_checkpoint(cache, nn['model'], nn['optimizer'], name=cache['best_nn_state'])
+        elif out['mode'] == 'test':
+            utils.load_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['best_nn_state'])
             avg, scores = evaluation(cache, state, nn['model'], split_key='validation', device=nn['device'])
             out['test_log'] = [vars(avg), vars(scores)]
             out['mode'] = cache['_mode_']

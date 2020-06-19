@@ -76,9 +76,10 @@ def iteration(cache, batch, model, optimizer=None, **kw):
     _, predicted = torch.max(out, 1)
     score = new_metrics(cache['num_class'])
     score.add(predicted, labels)
+    val = Avg()
+    val.add(loss.item(), len(inputs))
 
-    return {'out': out, 'loss': loss.item(),
-            'score': score, 'prediction': predicted}
+    return {'out': out, 'loss': val, 'score': score, 'prediction': predicted}
 
 
 def train(cache, input, state, model, optimizer, **kw):
@@ -89,7 +90,7 @@ def train(cache, input, state, model, optimizer, **kw):
         if input.get('avg_grads_file') else None
     batch = get_next_batch(cache, state)
     it = iteration(cache, batch, model, optimizer, avg_grad=avg_grads, device=kw['device'])
-    cache['train_log'].append([it['loss'], len(batch['inputs']), vars(it['score'])])
+    cache['train_log'].append([vars(it['loss']), vars(it['score'])])
     out['grads_file'] = 'grads.npy'
     np.save(state['transferDirectory'] + sep + out['grads_file'],
             np.array([p.grad.numpy() for p in model.parameters()]))
@@ -114,6 +115,6 @@ def evaluation(cache, state, model, split_key, **kw):
                                                   pin_memory=cache.get('pin_memory', True))
         for batch in eval_dataloader:
             it = iteration(cache, batch, model, device=kw['device'])
-            avg.add(it['loss'], batch['inputs'].shape[0])
+            avg.accumulate(it['loss'])
             eval_score.accumulate(it['score'])
     return avg, eval_score

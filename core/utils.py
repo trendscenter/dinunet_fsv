@@ -13,13 +13,13 @@ plt.switch_backend('agg')
 plt.rcParams["figure.figsize"] = [16, 9]
 
 
-def save_checkpoint(cache, model, optimizer, name):
+def save_checkpoint(cache, model, optimizer, id):
     chk = {'model_state_dict': model.state_dict(), 'optimizer_state_dict': optimizer.state_dict()}
-    torch.save(chk, cache['log_dir'] + sep + name)
+    torch.save(chk, cache['log_dir'] + sep + id)
 
 
-def load_checkpoint(cache, model, optimizer, name):
-    checkpoint = torch.load(cache['log_dir'] + sep + name)
+def load_checkpoint(cache, model, optimizer, id):
+    checkpoint = torch.load(cache['log_dir'] + sep + id)
     model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
 
@@ -27,7 +27,7 @@ def load_checkpoint(cache, model, optimizer, name):
 def save_logs(cache, plot_keys=[], file_keys=[], num_points=51):
     scaler = MinMaxScaler()
     for k in plot_keys:
-        data = cache['logs'].get(k, [])
+        data = cache.get(k, [])
 
         if len(data) == 0:
             continue
@@ -51,8 +51,8 @@ def save_logs(cache, plot_keys=[], file_keys=[], num_points=51):
 
     for fk in file_keys:
         with open(cache['log_dir'] + os.sep + f'{fk}.csv', 'w') as file:
-            for line in cache['logs'][fk] if any(isinstance(ln, list)
-                                                 for ln in cache['logs'][fk]) else [cache['logs'][fk]]:
+            for line in cache[fk] if any(isinstance(ln, list)
+                                                 for ln in cache[fk]) else [cache[fk]]:
                 if isinstance(line, list):
                     file.write(','.join([str(s) for s in line]) + '\n')
                 else:
