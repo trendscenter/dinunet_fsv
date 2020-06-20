@@ -5,12 +5,12 @@ import sys
 from itertools import repeat
 
 import numpy as np
-import pydevd_pycharm
 
 import core.utils as utils
 from core.measurements import Prf1a, Avg
 
-pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
+
+# pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
 
 
 def aggregate_sites_grad(input):
@@ -159,15 +159,16 @@ if __name__ == "__main__":
             out['global_modes'] = set_mode(input, mode='test')
 
     if check(all, 'phase', 'next_run_waiting', input):
+        save_test_scores(cache, input)
         if len(cache['folds']) > 0:
-            save_test_scores(cache, input)
             out['nn'] = {}
             out['run'] = next_run(cache, state)
             out['global_modes'] = set_mode(input)
             nxt_phase = 'init_nn'
         else:
-            out['phase'] = 'success'
+            nxt_phase = 'success'
 
     out['phase'] = nxt_phase
     output = json.dumps({'output': out, 'cache': cache, 'success': check(all, 'phase', 'success', input)})
     sys.stdout.write(output)
+    args, cache, input, state, out, output = [None] * 6
