@@ -33,9 +33,12 @@ def init_nn_params(cache):
     out['input_size'] = 66
     out['hidden_sizes'] = [16, 8, 4, 2]
     out['num_class'] = 2
-    out['epochs'] = 11
+    out['epochs'] = 21
     out['learning_rate'] = 0.001
     cache['batch_size'] = 32
+    cache['eid'] = 'volumetric'
+    out['eid'] = 'volumetric'
+    cache['global_test_score'] = []
     return out
 
 
@@ -51,7 +54,7 @@ def next_run(cache, state):
 
     fold = dict(cache['folds'].pop())
     log_dir = '_'.join([str(s) for s in set(f for _, (f, _) in fold.items())])
-    cache.update(log_dir=state['outputDirectory'] + os.sep + log_dir)
+    cache.update(log_dir=state['outputDirectory'] + os.sep + cache['eid'] + os.sep + log_dir)
     os.makedirs(cache['log_dir'], exist_ok=True)
 
     cache.update(best_val_score=0)
@@ -116,7 +119,9 @@ def save_test_scores(cache, input):
         test_prfa.update(tp=vp['tp'], tn=vp['tn'], fn=vp['fn'], fp=vp['fp'])
     cache['test_log'].append([test_loss.average, *test_prfa.prfa()])
     cache['test_scores'] = json.dumps(vars(test_prfa))
-    utils.save_logs(cache, plot_keys=['train_log', 'validation_log'], file_keys=['test_log', 'test_scores'])
+    cache['global_test_score'].append(vars(test_prfa))
+    utils.save_logs(cache, plot_keys=['train_log', 'validation_log'], file_keys=['test_log', 'test_scores'],
+                    log_dir=cache['log_dir'])
 
 
 def set_mode(input, mode=None):
@@ -166,6 +171,13 @@ if __name__ == "__main__":
             out['global_modes'] = set_mode(input)
             nxt_phase = 'init_nn'
         else:
+            score = Prf1a()
+            for sc in cache['global_test_score']:
+                score.update(tp=sc['tp'], tn=sc['tn'], fn=sc['fn'], fp=sc['fp'])
+            cache['global_test_score'] = ['Precision,Recall,F1,Accuracy']
+            cache['global_test_score'].append(score.prfa())
+            utils.save_logs(cache, file_keys=['global_test_score'],
+                            log_dir=state['outputDirectory'] + os.sep + cache['eid'])
             nxt_phase = 'success'
 
     out['phase'] = nxt_phase

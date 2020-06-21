@@ -20,7 +20,7 @@ def load_checkpoint(cache, model, optimizer, id):
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
 
 
-def save_logs(cache, plot_keys=[], file_keys=[], num_points=51):
+def save_logs(cache, plot_keys=[], file_keys=[], num_points=51, log_dir=None):
     plt.switch_backend('agg')
     plt.rcParams["figure.figsize"] = [16, 9]
     from sklearn.preprocessing import MinMaxScaler
@@ -45,11 +45,11 @@ def save_logs(cache, plot_keys=[], file_keys=[], num_points=51):
         ax = df.plot(x_compat=True, alpha=0.1, legend=0)
         rolling.plot(ax=ax, title=k.upper())
 
-        plt.savefig(cache['log_dir'] + os.sep + k + '.png')
+        plt.savefig(log_dir + os.sep + k + '.png')
         plt.close('all')
 
     for fk in file_keys:
-        with open(cache['log_dir'] + os.sep + f'{fk}.csv', 'w') as file:
+        with open(log_dir + os.sep + f'{fk}.csv', 'w') as file:
             for line in cache[fk] if any(isinstance(ln, list)
                                          for ln in cache[fk]) else [cache[fk]]:
                 if isinstance(line, list):

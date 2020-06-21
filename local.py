@@ -5,12 +5,12 @@ import random
 import sys
 from os import sep
 
-import pydevd_pycharm
 import torch
 
 from classification import FreeSurferDataset, train, evaluation
 from core import utils
 from core.models import MSANNet
+
 
 # pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
 
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     if nxt_phase == 'init_nn':
         cache.update(**input['nn'], **input['run'][state['clientId']], epoch=0, cursor=0, train_log=[])
         cache['split_file'] = cache['splits'][cache['split_ix']]
-        cache['log_dir'] = state['outputDirectory'] + sep + cache['split_file'].split('.')[0]
+        cache['log_dir'] = state['outputDirectory'] + sep + cache['eid'] + sep + cache['split_file'].split('.')[0]
         os.makedirs(cache['log_dir'], exist_ok=True)
         cache['current_nn_state'] = 'current.nn.pt'
         cache['best_nn_state'] = 'best.nn.pt'
