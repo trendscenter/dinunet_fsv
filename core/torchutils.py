@@ -14,7 +14,7 @@ class NNDataLoader(DataLoader):
         super(NNDataLoader, self).__init__(**kw)
 
     @classmethod
-    def get_loader(cls, **kw):
+    def new(cls, **kw):
         _kw = {
             'dataset': None,
             'batch_size': 1,

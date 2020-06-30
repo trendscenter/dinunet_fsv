@@ -43,8 +43,8 @@ class FreeSurferDataset(Dataset):
         return len(self.indices)
 
     def get_loader(self, shuffle=False, batch_size=None, num_workers=0, pin_memory=True, **kw):
-        return NNDataLoader.get_loader(dataset=self, shuffle=shuffle, batch_size=batch_size,
-                                       num_workers=num_workers, pin_memory=pin_memory, **kw)
+        return NNDataLoader.new(dataset=self, shuffle=shuffle, batch_size=batch_size,
+                                num_workers=num_workers, pin_memory=pin_memory, **kw)
 
 
 def get_next_batch(cache, state):
