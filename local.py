@@ -11,8 +11,8 @@ from classification import FreeSurferDataset, train, evaluation
 from core import utils
 from core.models import MSANNet
 
-
-# pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
+import pydevd_pycharm
+pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
 
 
 def init_nn(cache, init_weights=False):

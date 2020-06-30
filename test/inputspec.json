@@ -10,7 +10,7 @@
       "value": "split_S00"
     },
     "mode": {
-      "value": "train"
+      "value": "test"
     }
   },
   {
@@ -24,7 +24,7 @@
       "value": "split_S01"
     },
     "mode": {
-      "value": "train"
+      "value": "test"
     }
   },
   {
@@ -38,7 +38,7 @@
       "value": "split_S02"
     },
     "mode": {
-      "value": "train"
+      "value": "test"
     }
   },
   {
@@ -52,7 +52,7 @@
       "value": "split_S03"
     },
     "mode": {
-      "value": "train"
+      "value": "test"
     }
   }
 ]

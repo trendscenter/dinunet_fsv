@@ -1,21 +1,21 @@
 {
   "meta": {
-    "name": "Multi Shot ANN example",
-    "id": "msann_freesurfer",
+    "name": "Multi Shot nn classification on Volumetric data",
+    "id": "volumetric",
     "version": "v1.0.0",
     "repository": "",
     "description": "..."
   },
   "computation": {
     "type": "docker",
-    "dockerImage": "msann",
+    "dockerImage": "volumetric",
     "command": [
       "python",
       "\/computation\/local.py"
     ],
     "remote": {
       "type": "docker",
-      "dockerImage": "msann",
+      "dockerImage": "volumetric",
       "command": [
         "python",
         "\/computation\/remote.py"
