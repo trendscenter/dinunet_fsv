@@ -1,5 +1,7 @@
 from torch.utils.data import DataLoader
 from torch.utils.data._utils.collate import default_collate
+import torch.nn as nn
+
 
 
 def safe_collate(batch):
@@ -28,3 +30,15 @@ class NNDataLoader(DataLoader):
         for k in _kw.keys():
             _kw[k] = kw.get(k, _kw.get(k))
         return cls(collate_fn=safe_collate, **_kw)
+
+
+def initialize_weights(*models):
+    for model in models:
+        for module in model.modules():
+            if isinstance(module, nn.Conv2d) or isinstance(module, nn.Linear):
+                nn.init.kaiming_normal_(module.weight)
+                if module.bias is not None:
+                    module.bias.data.zero_()
+            elif isinstance(module, nn.BatchNorm2d):
+                module.weight.data.fill_(1)
+                module.bias.data.zero_()

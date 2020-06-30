@@ -10,6 +10,7 @@ import torch
 from classification import FreeSurferDataset, train, evaluation
 from core import utils
 from core.models import MSANNet
+from core.torchutils import initialize_weights
 
 import pydevd_pycharm
 pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
@@ -22,7 +23,7 @@ def init_nn(cache, init_weights=False):
     optimizer = torch.optim.Adam(model.parameters(), lr=cache['learning_rate'])
     if init_weights:
         torch.manual_seed(cache['seed'])
-        utils.initialize_weights(model)
+        initialize_weights(model)
     return {'device': device, 'model': model.to(device), 'optimizer': optimizer}
 
 
