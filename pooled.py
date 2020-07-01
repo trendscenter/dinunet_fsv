@@ -83,6 +83,7 @@ if __name__ == "__main__":
         initialize_weights(model)
         optim = torch.optim.Adam(model.parameters(), lr=LR)
 
+        run_test = mode == 'test'
         if mode == 'train':
             train_dset = ConcatDataset(train_set)
             train_loader = NNDataLoader.new(dataset=train_dset, batch_size=BZ,
@@ -91,9 +92,9 @@ if __name__ == "__main__":
             val_loader = NNDataLoader.new(dataset=val_dset, batch_size=BZ, pin_memory=True, shuffle=True)
             print(f'Fold {fold}:', len(train_dset), len(val_dset))
             train(fold, model, optim, device, epochs, train_loader, val_loader)
-            mode = 'test'
+            run_test = True
 
-        if mode == 'test':
+        if run_test:
             test_dset = ConcatDataset(test_set)
             test_loader = NNDataLoader.new(dataset=test_dset, batch_size=BZ, pin_memory=True, shuffle=True)
             model.load_state_dict(torch.load(f'pooled_log/best_{fold}.pt'))
