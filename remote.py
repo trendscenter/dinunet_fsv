@@ -9,8 +9,8 @@ import numpy as np
 import core.utils as utils
 from core.measurements import Prf1a, Avg
 
-import pydevd_pycharm
-pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
+# import pydevd_pycharm
+# pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
 
 
 def aggregate_sites_grad(input):
