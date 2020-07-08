@@ -1,7 +1,9 @@
+from os import sep
+
+import torch
 from torch.utils.data import DataLoader
 from torch.utils.data._utils.collate import default_collate
 import torch.nn as nn
-
 
 
 def safe_collate(batch):
@@ -42,3 +44,14 @@ def initialize_weights(*models):
             elif isinstance(module, nn.BatchNorm2d):
                 module.weight.data.fill_(1)
                 module.bias.data.zero_()
+
+
+def save_checkpoint(cache, model, optimizer, id):
+    chk = {'model_state_dict': model.state_dict(), 'optimizer_state_dict': optimizer.state_dict()}
+    torch.save(chk, cache['log_dir'] + sep + id)
+
+
+def load_checkpoint(cache, model, optimizer, id):
+    checkpoint = torch.load(cache['log_dir'] + sep + id)
+    model.load_state_dict(checkpoint['model_state_dict'])
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])

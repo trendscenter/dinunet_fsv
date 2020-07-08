@@ -51,7 +51,6 @@ def generate_folds(cache, input):
 
 def next_run(cache, state):
     seed = 244627
-
     fold = dict(cache['folds'].pop())
     log_dir = '_'.join([str(s) for s in set(f for _, (f, _) in fold.items())])
     cache.update(log_dir=state['outputDirectory'] + os.sep + cache['eid'] + os.sep + log_dir)
@@ -106,7 +105,6 @@ def on_epoch_end(cache, input):
         out['save_current_as_best'] = True
     else:
         out['save_current_as_best'] = False
-
     return out
 
 
