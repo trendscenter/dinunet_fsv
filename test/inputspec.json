@@ -9,11 +9,40 @@
     "split_dir": {
       "value": "split_S00"
     },
+    "num_of_folds": {
+      "value": 10
+    },
     "mode": {
-      "value": "test"
+      "value": "train"
     },
     "use_gpu": {
       "value": true
+    },
+    "input_size": {
+      "value": 66
+    },
+    "hidden_sizes": {
+      "value": [
+        16,
+        8,
+        4,
+        2
+      ]
+    },
+    "num_class": {
+      "value": 2
+    },
+    "epochs": {
+      "value": 11
+    },
+    "learning_rate": {
+      "value": 0.001
+    },
+    "batch_size": {
+      "value": 32
+    },
+    "id": {
+      "value": "freesurfer_volumetric"
     }
   },
   {
@@ -26,11 +55,40 @@
     "split_dir": {
       "value": "split_S01"
     },
+    "num_of_folds": {
+      "value": 10
+    },
     "mode": {
-      "value": "test"
+      "value": "train"
     },
     "use_gpu": {
       "value": true
+    },
+    "input_size": {
+      "value": 66
+    },
+    "hidden_sizes": {
+      "value": [
+        16,
+        8,
+        4,
+        2
+      ]
+    },
+    "num_class": {
+      "value": 2
+    },
+    "epochs": {
+      "value": 11
+    },
+    "learning_rate": {
+      "value": 0.001
+    },
+    "batch_size": {
+      "value": 32
+    },
+    "id": {
+      "value": "freesurfer_volumetric"
     }
   },
   {
@@ -43,11 +101,40 @@
     "split_dir": {
       "value": "split_S02"
     },
+    "num_of_folds": {
+      "value": 10
+    },
     "mode": {
-      "value": "test"
+      "value": "train"
     },
     "use_gpu": {
       "value": true
+    },
+    "input_size": {
+      "value": 66
+    },
+    "hidden_sizes": {
+      "value": [
+        16,
+        8,
+        4,
+        2
+      ]
+    },
+    "num_class": {
+      "value": 2
+    },
+    "epochs": {
+      "value": 11
+    },
+    "learning_rate": {
+      "value": 0.001
+    },
+    "batch_size": {
+      "value": 32
+    },
+    "id": {
+      "value": "freesurfer_volumetric"
     }
   },
   {
@@ -60,11 +147,40 @@
     "split_dir": {
       "value": "split_S03"
     },
+    "num_of_folds": {
+      "value": 10
+    },
     "mode": {
-      "value": "test"
+      "value": "train"
     },
     "use_gpu": {
       "value": true
+    },
+    "input_size": {
+      "value": 66
+    },
+    "hidden_sizes": {
+      "value": [
+        16,
+        8,
+        4,
+        2
+      ]
+    },
+    "num_class": {
+      "value": 2
+    },
+    "epochs": {
+      "value": 11
+    },
+    "learning_rate": {
+      "value": 0.001
+    },
+    "batch_size": {
+      "value": 32
+    },
+    "id": {
+      "value": "freesurfer_volumetric"
     }
   }
 ]

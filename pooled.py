@@ -1,6 +1,7 @@
 from core.models import MSANNet
 from classification import FreeSurferDataset
-from core.torchutils import NNDataLoader, initialize_weights
+from core.utils import initialize_weights
+from core.datautils import NNDataLoader
 from torch.utils.data import ConcatDataset
 import torch
 import torch.nn.functional as F

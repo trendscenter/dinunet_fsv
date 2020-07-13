@@ -1,21 +1,21 @@
 {
   "meta": {
     "name": "Multi Shot nn classification on Volumetric data",
-    "id": "volumetric",
+    "id": "freesurfer_volumetric",
     "version": "v1.0.0",
     "repository": "",
     "description": "..."
   },
   "computation": {
     "type": "docker",
-    "dockerImage": "volumetric",
+    "dockerImage": "fsv",
     "command": [
       "python",
       "\/computation\/local.py"
     ],
     "remote": {
       "type": "docker",
-      "dockerImage": "volumetric",
+      "dockerImage": "fsv",
       "command": [
         "python",
         "\/computation\/remote.py"

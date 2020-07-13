@@ -8,8 +8,7 @@ import torch
 import torch.nn.functional as F
 from torch.utils.data.dataset import Dataset
 
-from core import data_parser
-from core.torchutils import NNDataLoader
+from core.datautils import NNDataLoader
 
 sep = os.sep
 from core.measurements import new_metrics, Avg
@@ -35,8 +34,9 @@ class FreeSurferDataset(Dataset):
 
     def __getitem__(self, ix):
         file, y = self.indices[ix]
-        data, errors = data_parser.parse_subj_volume_files(self.files_dir, [file])
-        x = data.iloc[0].values
+        df = pd.read_csv(self.files_dir + os.sep + file, sep='\t', names=['File', file], skiprows=1)
+        df = df.set_index(df.columns[0])
+        x = df.T.iloc[0].values
         return {'inputs': torch.tensor(x), 'labels': torch.tensor(y)}
 
     def __len__(self):
