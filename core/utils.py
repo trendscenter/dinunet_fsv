@@ -1,11 +1,8 @@
 import json
-import os
 from os import sep
 
-import pandas as pd
 import torch
 import torch.nn as nn
-from matplotlib import pyplot as plt
 
 from classification import FreeSurferDataset
 from core.models import MSANNet
@@ -75,39 +72,3 @@ def init_dataset(cache, state):
         cache['data_len'] = (len(dataset) // cache['batch_size']) * cache['batch_size']
 
 
-def save_logs(cache, plot_keys=[], file_keys=[], num_points=51, log_dir=None):
-    plt.switch_backend('agg')
-    plt.rcParams["figure.figsize"] = [16, 9]
-    from sklearn.preprocessing import MinMaxScaler
-    scaler = MinMaxScaler()
-    for k in plot_keys:
-        data = cache.get(k, [])
-
-        if len(data) == 0:
-            continue
-
-        df = pd.DataFrame(data[1:], columns=data[0].split(','))
-
-        if len(df) == 0:
-            continue
-
-        for col in df.columns:
-            if max(df[col]) > 1:
-                df[col] = scaler.fit_transform(df[[col]])
-
-        rollin_window = max(df.shape[0] // num_points + 1, 3)
-        rolling = df.rolling(rollin_window, min_periods=1).mean()
-        ax = df.plot(x_compat=True, alpha=0.1, legend=0)
-        rolling.plot(ax=ax, title=k.upper())
-
-        plt.savefig(log_dir + os.sep + k + '.png')
-        plt.close('all')
-
-    for fk in file_keys:
-        with open(log_dir + os.sep + f'{fk}.csv', 'w') as file:
-            for line in cache[fk] if any(isinstance(ln, list)
-                                         for ln in cache[fk]) else [cache[fk]]:
-                if isinstance(line, list):
-                    file.write(','.join([str(s) for s in line]) + '\n')
-                else:
-                    file.write(f'{line}\n')

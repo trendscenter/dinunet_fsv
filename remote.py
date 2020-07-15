@@ -9,6 +9,9 @@ import numpy as np
 import core.datautils
 from core.measurements import Prf1a, Avg
 import core.utils as ut
+import shutil
+import datetime
+
 
 # import pydevd_pycharm
 #
@@ -138,8 +141,22 @@ def save_test_scores(cache, input):
     cache['test_log'].append([test_loss.average, *test_prfa.prfa()])
     cache['test_scores'] = json.dumps(vars(test_prfa))
     cache['global_test_score'].append(vars(test_prfa))
-    ut.save_logs(cache, plot_keys=['train_log', 'validation_log'], file_keys=['test_log', 'test_scores'],
-                         log_dir=cache['log_dir'])
+    core.datautils.save_logs(cache, plot_keys=['train_log', 'validation_log'], file_keys=['test_log', 'test_scores'],
+                             log_dir=cache['log_dir'])
+
+
+def send_global_scores(cache, state):
+    out = {}
+    score = Prf1a()
+    for sc in cache['global_test_score']:
+        score.update(tp=sc['tp'], tn=sc['tn'], fn=sc['fn'], fp=sc['fp'])
+    cache['global_test_score'] = ['Precision,Recall,F1,Accuracy']
+    cache['global_test_score'].append(score.prfa())
+    core.datautils.save_logs(cache, file_keys=['global_test_score'],
+                             log_dir=state['outputDirectory'] + os.sep + cache['id'])
+    out['results_zip'] = f"{cache['id']}_" + '_'.join(str(datetime.datetime.now()).split(' '))
+    shutil.make_archive(f"{state['transferDirectory']}{os.sep}{out['results_zip']}", 'zip', cache['log_dir'])
+    return out
 
 
 def set_mode(input, mode=None):
@@ -201,13 +218,7 @@ if __name__ == "__main__":
             out['global_modes'] = set_mode(input)
             nxt_phase = 'init_nn'
         else:
-            score = Prf1a()
-            for sc in cache['global_test_score']:
-                score.update(tp=sc['tp'], tn=sc['tn'], fn=sc['fn'], fp=sc['fp'])
-            cache['global_test_score'] = ['Precision,Recall,F1,Accuracy']
-            cache['global_test_score'].append(score.prfa())
-            core.utils.save_logs(cache, file_keys=['global_test_score'],
-                                 log_dir=state['outputDirectory'] + os.sep + cache['eid'])
+            out.update(**send_global_scores(cache, state))
             nxt_phase = 'success'
 
     out['phase'] = nxt_phase

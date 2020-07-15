@@ -8,7 +8,7 @@ import torch
 import torch.nn.functional as F
 from torch.utils.data.dataset import Dataset
 
-from core.datautils import NNDataLoader
+from core.datautils import NNDataLoader, save_logs
 
 sep = os.sep
 from core.measurements import new_metrics, Avg
@@ -37,7 +37,7 @@ class FreeSurferDataset(Dataset):
         df = pd.read_csv(self.files_dir + os.sep + file, sep='\t', names=['File', file], skiprows=1)
         df = df.set_index(df.columns[0])
         x = df.T.iloc[0].values
-        return {'inputs': torch.tensor(x), 'labels': torch.tensor(y)}
+        return {'inputs': torch.tensor(x), 'labels': torch.tensor(y), 'ix': torch.tensor(ix)}
 
     def __len__(self):
         return len(self.indices)
@@ -58,6 +58,7 @@ def get_next_batch(cache, state):
 
 def iteration(cache, batch, model, optimizer=None, **kw):
     inputs, labels = batch['inputs'].to(kw['device']).float(), batch['labels'].to(kw['device']).long()
+    indices = batch['ix'].to(kw['device']).long()
 
     if optimizer and model.training:
         optimizer.zero_grad()
@@ -79,7 +80,8 @@ def iteration(cache, batch, model, optimizer=None, **kw):
     val = Avg()
     val.add(loss.item(), len(inputs))
 
-    return {'out': out, 'loss': val, 'score': score, 'prediction': predicted}
+    return {'out': out, 'loss': val, 'score': score, 'prediction': predicted,
+            'indices': indices}
 
 
 def train(cache, input, state, model, optimizer, **kw):
@@ -97,12 +99,26 @@ def train(cache, input, state, model, optimizer, **kw):
     return out
 
 
+def get_predictions(dataset, it):
+    predictions = []
+    for ix, pred, out in zip(it['indices'].cpu().numpy(), it['prediction'], it['out'][:, 1].exp()):
+        file, label = dataset.indices[int(ix)]
+        predictions.append([file, label, pred.item(), round(out.item(), 3)])
+    return predictions
+
+
+def save_predictions(cache, predictions):
+    cache['predictions'] = predictions
+    save_logs(cache, file_keys=['predictions'], log_dir=cache['log_dir'])
+
+
 def evaluation(cache, state, model, split_key, **kw):
     model.eval()
     model = model.to(kw['device'])
 
     avg = Avg()
     eval_score = new_metrics(cache['num_class'])
+    eval_predictions = ['file,true_label,prediction,probability']
     with torch.no_grad(), open(
             state['baseDirectory'] + sep + cache['split_dir'] + sep + cache['split_file']) as split_file:
         eval_dataset = FreeSurferDataset(files_dir=state['baseDirectory'] + sep + cache['data_dir'],
@@ -117,4 +133,9 @@ def evaluation(cache, state, model, split_key, **kw):
             it = iteration(cache, batch, model, device=kw['device'])
             avg.accumulate(it['loss'])
             eval_score.accumulate(it['score'])
+            if kw.get('save_predictions'):
+                eval_predictions += get_predictions(eval_dataset, it)
+
+    if kw.get('save_predictions'):
+        save_predictions(cache, eval_predictions)
     return avg, eval_score
