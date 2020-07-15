@@ -33,7 +33,7 @@
       "value": 2
     },
     "epochs": {
-      "value": 11
+      "value": 51
     },
     "learning_rate": {
       "value": 0.001
@@ -79,7 +79,7 @@
       "value": 2
     },
     "epochs": {
-      "value": 11
+      "value": 51
     },
     "learning_rate": {
       "value": 0.001
@@ -125,7 +125,7 @@
       "value": 2
     },
     "epochs": {
-      "value": 11
+      "value": 51
     },
     "learning_rate": {
       "value": 0.001
@@ -171,7 +171,7 @@
       "value": 2
     },
     "epochs": {
-      "value": 11
+      "value": 51
     },
     "learning_rate": {
       "value": 0.001
