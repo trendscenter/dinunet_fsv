@@ -1,14 +1,17 @@
 #!/usr/bin/python
 import json
 import os
-import random
+import shutil
 import sys
 from os import sep
 
-from classification import train, evaluation
+import pandas as pd
+import torch
+
 from core import utils as ut
-from core.datautils import init_k_folds
-import shutil
+from models import MSANNet
+from core.nn import train_n_eval, init_dataset
+from core.utils import init_k_folds, NNDataset, initialize_weights
 
 
 # import pydevd_pycharm
@@ -16,80 +19,45 @@ import shutil
 # pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
 
 
-def next_iter(cache):
-    out = {}
-    cache['cursor'] += cache['batch_size']
-    if cache['cursor'] >= cache['data_len']:
-        out['mode'] = 'val_waiting'
-        cache['cursor'] = 0
-        random.shuffle(cache['data_indices'])
+class FreeSurferDataset(NNDataset):
+    def __init__(self, **kw):
+        super().__init__(**kw)
 
-    return out
+    def load_indices(self, files, **kw):
+        labels_file = os.listdir(self.label_dir)[0]
+        labels = pd.read_csv(self.label_dir + os.sep + labels_file).set_index('freesurferfile')
+        for file in files:
+            y = labels.loc[file]['label']
+            """
+            int64 could not be json serializable.
+            """
+            self.indices.append([file, int(y)])
+
+    def __getitem__(self, ix):
+        file, y = self.indices[ix]
+        df = pd.read_csv(self.data_dir + os.sep + file, sep='\t', names=['File', file], skiprows=1)
+        df = df.set_index(df.columns[0])
+        x = df.T.iloc[0].values
+        return {'inputs': torch.tensor(x), 'labels': torch.tensor(y), 'ix': torch.tensor(ix)}
 
 
-def next_epoch(cache):
+def init_nn(cache, init_weights=False):
     """
-    Transition to next epoch after validation.
-    It will set 'train_waiting' status if we need more training
-    Else it will set 'test' status
+    Initialize neural network/optimizer with locked parameters(check on remote script for that).
+    Also detect and assign specified GPUs.
+    @note Works only with one GPU per site at the moment.
     """
-    out = {}
-    cache['epoch'] += 1
-    if cache['epoch'] >= cache['epochs']:
-        out['mode'] = 'test'
+    if torch.cuda.is_available() and cache.get('use_gpu'):
+        device = torch.device("cuda:0")
     else:
-        cache['cursor'] = 0
-        out['mode'] = 'train_waiting'
-        random.shuffle(cache['data_indices'])
-
-    out['train_log'] = cache['train_log']
-    cache['train_log'] = []
-    return out
-
-
-def nn_computation(cache, input, state, nxt_phase):
-    out = {}
-    nn = ut.init_nn(cache, init_weights=False)
-    out['mode'] = input['global_modes'].get(state['clientId'], cache['mode'])
-
-    if input.get('save_current_as_best'):
-        ut.load_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['current_nn_state'])
-        ut.save_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['best_nn_state'])
-
-    if out['mode'] in ['train', 'val_waiting']:
-        """
-        All sites must begin/resume the training the same time.
-        To enforce this, we have a 'val_waiting' status. Lagged sites will go to this status, and reshuffle the data,
-         take part in the training with everybody until all sites go to 'val_waiting' status.
-        """
-        ut.load_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['current_nn_state'])
-        out.update(**train(cache, input, state, nn['model'], nn['optimizer'], device=nn['device']))
-        ut.save_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['current_nn_state'])
-        out.update(**next_iter(cache))
-
-    elif out['mode'] == 'validation':
-        """
-        Once all sites are in 'val_waiting' status, remote issues 'validation' signal. 
-        Once all sites run validation phase, they go to 'train_waiting' status. 
-        Once all sites are in this status, remote issues 'train' signal and all sites reshuffle the indices and resume training.
-        We send the confusion matrix to the remote to accumulate global score for model selection.
-        """
-        ut.load_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['current_nn_state'])
-        avg, scores = evaluation(cache, state, nn['model'], split_key='validation', device=nn['device'])
-        out['validation_log'] = [vars(avg), vars(scores)]
-        out.update(**next_epoch(cache))
-
-    elif out['mode'] == 'test':
-        """
-        We send confusion matrix to remote for global test score.
-        """
-        ut.load_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['best_nn_state'])
-        avg, scores = evaluation(cache, state, nn['model'], split_key='validation', device=nn['device'],
-                                 save_predictions=True)
-        out['test_log'] = [vars(avg), vars(scores)]
-        out['mode'] = cache['_mode_']
-        nxt_phase = 'next_run_waiting'
-    return out, nxt_phase
+        device = torch.device("cpu")
+    model = MSANNet(in_size=cache['input_size'], hidden_sizes=cache['hidden_sizes'],
+                    out_size=cache['num_class'])
+    optimizer = torch.optim.Adam(model.parameters(), lr=cache['learning_rate'])
+    if init_weights:
+        torch.manual_seed(cache['seed'])
+        initialize_weights(model)
+    return {'device': device, 'model': model.to(device), 'optimizer': optimizer}
 
 
 if __name__ == "__main__":
@@ -120,16 +88,17 @@ if __name__ == "__main__":
         os.makedirs(cache['log_dir'], exist_ok=True)
         cache['current_nn_state'] = 'current.nn.pt'
         cache['best_nn_state'] = 'best.nn.pt'
-        nn = ut.init_nn(cache, init_weights=True)
+        nn = init_nn(cache, init_weights=True)
         ut.save_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['current_nn_state'])
-        ut.init_dataset(cache, state)
+        init_dataset(cache, state, FreeSurferDataset)
         nxt_phase = 'computation'
 
     if nxt_phase == 'computation':
         """
         Train/validation and test phases
         """
-        out_, nxt_phase = nn_computation(cache, input, state, nxt_phase)
+        nn = init_nn(cache, init_weights=False)
+        out_, nxt_phase = train_n_eval(nn, cache, input, state, FreeSurferDataset, nxt_phase)
         out.update(**out_)
 
     elif nxt_phase == 'success':

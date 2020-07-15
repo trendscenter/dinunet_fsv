@@ -1,16 +1,15 @@
 #!/usr/bin/python
+import datetime
 import json
 import os
+import shutil
 import sys
 from itertools import repeat
 
 import numpy as np
 
-import core.datautils
+import core.utils
 from core.measurements import Prf1a, Avg
-import core.utils as ut
-import shutil
-import datetime
 
 
 # import pydevd_pycharm
@@ -141,8 +140,8 @@ def save_test_scores(cache, input):
     cache['test_log'].append([test_loss.average, *test_prfa.prfa()])
     cache['test_scores'] = json.dumps(vars(test_prfa))
     cache['global_test_score'].append(vars(test_prfa))
-    core.datautils.save_logs(cache, plot_keys=['train_log', 'validation_log'], file_keys=['test_log', 'test_scores'],
-                             log_dir=cache['log_dir'])
+    core.utils.save_logs(cache, plot_keys=['train_log', 'validation_log'], file_keys=['test_log', 'test_scores'],
+                         log_dir=cache['log_dir'])
 
 
 def send_global_scores(cache, state):
@@ -152,8 +151,8 @@ def send_global_scores(cache, state):
         score.update(tp=sc['tp'], tn=sc['tn'], fn=sc['fn'], fp=sc['fp'])
     cache['global_test_score'] = ['Precision,Recall,F1,Accuracy']
     cache['global_test_score'].append(score.prfa())
-    core.datautils.save_logs(cache, file_keys=['global_test_score'],
-                             log_dir=state['outputDirectory'] + os.sep + cache['id'])
+    core.utils.save_logs(cache, file_keys=['global_test_score'],
+                         log_dir=state['outputDirectory'] + os.sep + cache['id'])
     out['results_zip'] = f"{cache['id']}_" + '_'.join(str(datetime.datetime.now()).split(' '))
     shutil.make_archive(f"{state['transferDirectory']}{os.sep}{out['results_zip']}", 'zip', cache['log_dir'])
     return out
