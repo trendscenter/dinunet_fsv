@@ -35,6 +35,9 @@
     "epochs": {
       "value": 51
     },
+    "patience": {
+      "value": 31
+    },
     "learning_rate": {
       "value": 0.001
     },
@@ -80,6 +83,9 @@
     },
     "epochs": {
       "value": 51
+    },
+    "patience": {
+      "value": 31
     },
     "learning_rate": {
       "value": 0.001
@@ -127,6 +133,9 @@
     "epochs": {
       "value": 51
     },
+    "patience": {
+      "value": 31
+    },
     "learning_rate": {
       "value": 0.001
     },
@@ -172,6 +181,9 @@
     },
     "epochs": {
       "value": 51
+    },
+    "patience": {
+      "value": 31
     },
     "learning_rate": {
       "value": 0.001

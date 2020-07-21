@@ -1,0 +1,2 @@
+FROM nvidia/cuda:9.2-base-ubuntu18.04
+ENTRYPOINT ["tail", "-f", "/dev/null"]
