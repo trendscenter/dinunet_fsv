@@ -83,7 +83,7 @@ def init_k_folds(cache, state):
                              k=cache['num_of_folds'],
                              save_to_dir=cache['split_dir'])
     elif len(os.listdir(split_dir)) == cache['num_of_folds']:
-        shutil.copy(split_dir, cache['split_dir'])
+        [shutil.copy(split_dir + sep + f, cache['split_dir'] + sep + f) for f in os.listdir(split_dir)]
     else:
         raise ValueError(f"Number of splits in {split_dir} of site {state['clientId']} \
                          must be {cache['num_of_folds']} instead of {len(os.listdir(split_dir))}")
