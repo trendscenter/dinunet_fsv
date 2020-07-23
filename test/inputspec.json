@@ -38,6 +38,9 @@
     "patience": {
       "value": 31
     },
+    "num_workers": {
+      "value": 8
+    },
     "learning_rate": {
       "value": 0.001
     },
@@ -86,6 +89,9 @@
     },
     "patience": {
       "value": 31
+    },
+    "num_workers": {
+      "value": 8
     },
     "learning_rate": {
       "value": 0.001
@@ -136,6 +142,9 @@
     "patience": {
       "value": 31
     },
+    "num_workers": {
+      "value": 8
+    },
     "learning_rate": {
       "value": 0.001
     },
@@ -184,6 +193,9 @@
     },
     "patience": {
       "value": 31
+    },
+    "num_workers": {
+      "value": 8
     },
     "learning_rate": {
       "value": 0.001
