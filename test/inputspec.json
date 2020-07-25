@@ -15,9 +15,6 @@
     "mode": {
       "value": "train"
     },
-    "use_gpu": {
-      "value": true
-    },
     "input_size": {
       "value": 66
     },
@@ -66,9 +63,6 @@
     },
     "mode": {
       "value": "train"
-    },
-    "use_gpu": {
-      "value": true
     },
     "input_size": {
       "value": 66
@@ -119,9 +113,6 @@
     "mode": {
       "value": "train"
     },
-    "use_gpu": {
-      "value": true
-    },
     "input_size": {
       "value": 66
     },
@@ -170,9 +161,6 @@
     },
     "mode": {
       "value": "train"
-    },
-    "use_gpu": {
-      "value": true
     },
     "input_size": {
       "value": 66

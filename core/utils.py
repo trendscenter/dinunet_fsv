@@ -182,3 +182,13 @@ def save_logs(cache, plot_keys=[], file_keys=[], num_points=51, log_dir=None):
                     file.write(','.join([str(s) for s in line]) + '\n')
                 else:
                     file.write(f'{line}\n')
+
+
+def get_cuda_device(cache, state):
+    device = torch.device("cpu")
+    if len(cache.get('gpus', [])) > 0:
+        if torch.cuda.is_available():
+            device = torch.device(f"cuda:{cache['gpus'][0]}")
+        else:
+            raise Exception(f'*** GPU not detected in {state["clientId"]}. ***')
+    return device

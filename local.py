@@ -9,9 +9,10 @@ import pandas as pd
 import torch
 
 from core import utils as ut
-from models import MSANNet
 from core.nn import train_n_eval, init_dataset
 from core.utils import init_k_folds, NNDataset, initialize_weights
+from models import MSANNet
+
 
 # import pydevd_pycharm
 #
@@ -40,16 +41,13 @@ class FreeSurferDataset(NNDataset):
         return {'inputs': torch.tensor(x), 'labels': torch.tensor(y), 'ix': torch.tensor(ix)}
 
 
-def init_nn(cache, init_weights=False):
+def init_nn(cache, state, init_weights=False):
     """
     Initialize neural network/optimizer with locked parameters(check on remote script for that).
     Also detect and assign specified GPUs.
     @note Works only with one GPU per site at the moment.
     """
-    if torch.cuda.is_available() and cache.get('use_gpu'):
-        device = torch.device("cuda:0")
-    else:
-        device = torch.device("cpu")
+    device = ut.get_cuda_device(cache, state)
     model = MSANNet(in_size=cache['input_size'], hidden_sizes=cache['hidden_sizes'],
                     out_size=cache['num_class'])
     optimizer = torch.optim.Adam(model.parameters(), lr=cache['learning_rate'])
@@ -87,7 +85,7 @@ if __name__ == "__main__":
         os.makedirs(cache['log_dir'], exist_ok=True)
         cache['current_nn_state'] = 'current.nn.pt'
         cache['best_nn_state'] = 'best.nn.pt'
-        nn = init_nn(cache, init_weights=True)
+        nn = init_nn(cache, state, init_weights=True)
         ut.save_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['current_nn_state'])
         init_dataset(cache, state, FreeSurferDataset)
         nxt_phase = 'computation'
@@ -96,7 +94,7 @@ if __name__ == "__main__":
         """
         Train/validation and test phases
         """
-        nn = init_nn(cache, init_weights=False)
+        nn = init_nn(cache, state, init_weights=False)
         out_, nxt_phase = train_n_eval(nn, cache, input, state, FreeSurferDataset, nxt_phase)
         out.update(**out_)
 

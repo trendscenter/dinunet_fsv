@@ -1,4 +1,4 @@
-FROM coinstacteam/coinstac-base:cuda-10.2
+FROM coinstac/coinstac-base-python-stream
 
 # Copy the current directory contents into the container
 COPY ./requirements.txt /computation/requirements.txt

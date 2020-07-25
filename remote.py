@@ -10,7 +10,7 @@ import numpy as np
 
 import core.utils
 from core.measurements import Prf1a, Avg
-
+import torch
 
 # import pydevd_pycharm
 #
@@ -25,13 +25,16 @@ def aggregate_sites_info(input):
     grads = []
     for site, site_vars in input.items():
         grad_file = state['baseDirectory'] + os.sep + site + os.sep + site_vars['grads_file']
-        grad = np.load(grad_file, allow_pickle=True)
-        grads.append(grad)
-    out['avg_grads_file'] = 'avg_grads.npy'
+        grads.append(torch.load(grad_file))
+    out['avg_grads_file'] = 'avg_grads.tar'
     avg_grads = []
     for layer_grad in zip(*grads):
-        avg_grads.append(np.array(layer_grad).mean(0))
-    np.save(state['transferDirectory'] + os.sep + out['avg_grads_file'], np.array(avg_grads))
+        """
+        RuntimeError: "sum_cpu" not implemented for 'Half' so must convert to float32.
+        """
+        layer_grad = [lg.type(torch.float32).cpu() for lg in layer_grad]
+        avg_grads.append(torch.stack(layer_grad).mean(0).type(torch.float16))
+    torch.save(avg_grads, state['transferDirectory'] + os.sep + out['avg_grads_file'])
     return out
 
 
