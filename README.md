@@ -28,7 +28,7 @@
 * [dinunet/pooled.py](https://github.com/trendscenter/dinunet/blob/pooled.py) Easy way to run experiments by pooling data of all sites (Only developers might use this feature).
 * [dinunet/requirements.txt](https://github.com/trendscenter/dinunet/blob/master/requirements.txt) Python dependencies.
 
-
+# Usage
 * It needs nodejs, so I recommend using [NVM](https://github.com/nvm-sh/nvm) for hassle free installation.
 * [coinstac-simulator](https://github.com/trendscenter/coinstac/tree/master/packages/coinstac-simulator)
 * [coinstac](https://github.com/trendscenter/coinstac)
