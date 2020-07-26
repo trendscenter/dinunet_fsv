@@ -1,4 +1,4 @@
-### Higlights
+# Higlights
 * #### Each site can only access one user specified GPU at the moment. 
 * #### GPU for each site can be specified in inputspec.json as gpus:[0, 1, 2...]. Empty list/or no gpu options means use CPU.
 * #### For majority of classification tasks, one should only change:
