@@ -33,10 +33,10 @@
       "value": 2
     },
     "epochs": {
-      "value": 51
+      "value": 21
     },
     "patience": {
-      "value": 31
+      "value": 11
     },
     "num_workers": {
       "value": 8
@@ -85,10 +85,10 @@
       "value": 2
     },
     "epochs": {
-      "value": 51
+      "value": 21
     },
     "patience": {
-      "value": 31
+      "value": 11
     },
     "num_workers": {
       "value": 8
@@ -137,10 +137,10 @@
       "value": 2
     },
     "epochs": {
-      "value": 51
+      "value": 21
     },
     "patience": {
-      "value": 31
+      "value": 11
     },
     "num_workers": {
       "value": 8
@@ -175,7 +175,7 @@
       "value": []
     },
     "input_size": {
-      "value": 66
+      "value": 6
     },
     "hidden_sizes": {
       "value": [
@@ -189,10 +189,10 @@
       "value": 2
     },
     "epochs": {
-      "value": 51
+      "value": 21
     },
     "patience": {
-      "value": 31
+      "value": 11
     },
     "num_workers": {
       "value": 8
