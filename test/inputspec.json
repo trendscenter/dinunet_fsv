@@ -1,0 +1,210 @@
+[
+  {
+    "data_dir": {
+      "value": "subject_stats_S00"
+    },
+    "label_dir": {
+      "value": "label_S00"
+    },
+    "split_dir": {
+      "value": "split_S00"
+    },
+    "num_of_folds": {
+      "value": 10
+    },
+    "mode": {
+      "value": "train"
+    },
+    "gpus": {
+      "value": []
+    },
+    "input_size": {
+      "value": 66
+    },
+    "hidden_sizes": {
+      "value": [
+        16,
+        8,
+        4,
+        2
+      ]
+    },
+    "num_class": {
+      "value": 2
+    },
+    "epochs": {
+      "value": 21
+    },
+    "patience": {
+      "value": 11
+    },
+    "num_workers": {
+      "value": 8
+    },
+    "learning_rate": {
+      "value": 0.001
+    },
+    "batch_size": {
+      "value": 32
+    },
+    "id": {
+      "value": "freesurfer_volumetric"
+    }
+  },
+  {
+    "data_dir": {
+      "value": "subject_stats_S01"
+    },
+    "label_dir": {
+      "value": "label_S01"
+    },
+    "split_dir": {
+      "value": "split_S01"
+    },
+    "num_of_folds": {
+      "value": 10
+    },
+    "mode": {
+      "value": "train"
+    },
+    "gpus": {
+      "value": []
+    },
+    "input_size": {
+      "value": 66
+    },
+    "hidden_sizes": {
+      "value": [
+        16,
+        8,
+        4,
+        2
+      ]
+    },
+    "num_class": {
+      "value": 2
+    },
+    "epochs": {
+      "value": 21
+    },
+    "patience": {
+      "value": 11
+    },
+    "num_workers": {
+      "value": 8
+    },
+    "learning_rate": {
+      "value": 0.001
+    },
+    "batch_size": {
+      "value": 32
+    },
+    "id": {
+      "value": "freesurfer_volumetric"
+    }
+  },
+  {
+    "data_dir": {
+      "value": "subject_stats_S02"
+    },
+    "label_dir": {
+      "value": "label_S02"
+    },
+    "split_dir": {
+      "value": "split_S02"
+    },
+    "num_of_folds": {
+      "value": 10
+    },
+    "mode": {
+      "value": "train"
+    },
+    "gpus": {
+      "value": []
+    },
+    "input_size": {
+      "value": 66
+    },
+    "hidden_sizes": {
+      "value": [
+        16,
+        8,
+        4,
+        2
+      ]
+    },
+    "num_class": {
+      "value": 2
+    },
+    "epochs": {
+      "value": 21
+    },
+    "patience": {
+      "value": 11
+    },
+    "num_workers": {
+      "value": 8
+    },
+    "learning_rate": {
+      "value": 0.001
+    },
+    "batch_size": {
+      "value": 32
+    },
+    "id": {
+      "value": "freesurfer_volumetric"
+    }
+  },
+  {
+    "data_dir": {
+      "value": "subject_stats_S03"
+    },
+    "label_dir": {
+      "value": "label_S03"
+    },
+    "split_dir": {
+      "value": "split_S03"
+    },
+    "num_of_folds": {
+      "value": 10
+    },
+    "mode": {
+      "value": "train"
+    },
+    "gpus": {
+      "value": []
+    },
+    "input_size": {
+      "value": 6
+    },
+    "hidden_sizes": {
+      "value": [
+        16,
+        8,
+        4,
+        2
+      ]
+    },
+    "num_class": {
+      "value": 2
+    },
+    "epochs": {
+      "value": 21
+    },
+    "patience": {
+      "value": 11
+    },
+    "num_workers": {
+      "value": 8
+    },
+    "learning_rate": {
+      "value": 0.001
+    },
+    "batch_size": {
+      "value": 32
+    },
+    "id": {
+      "value": "freesurfer_volumetric"
+    }
+  }
+]
