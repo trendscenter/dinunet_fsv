@@ -13,41 +13,13 @@
       "python",
       "\/computation\/local.py"
     ],
-    "dockerOptions": {
-      "HostConfig": {
-        "DeviceRequests": [
-          {
-            "Drivers": "nvidia",
-            "Capabilities": [
-              [
-                "gpu"
-              ]
-            ]
-          }
-        ]
-      }
-    },
     "remote": {
       "type": "docker",
       "dockerImage": "fsv",
       "command": [
         "python",
         "\/computation\/remote.py"
-      ],
-      "dockerOptions": {
-        "HostConfig": {
-          "DeviceRequests": [
-            {
-              "Drivers": "nvidia",
-              "Capabilities": [
-                [
-                  "gpu"
-                ]
-              ]
-            }
-          ]
-        }
-      }
+      ]
     }
   }
 }
