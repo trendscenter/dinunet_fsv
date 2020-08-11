@@ -6,8 +6,6 @@ import shutil
 import sys
 from itertools import repeat
 
-import numpy as np
-
 import core.utils
 from core.measurements import Prf1a, Avg
 import torch
