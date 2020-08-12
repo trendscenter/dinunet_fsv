@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "Freesurfer volumes classification",
-    "id": "vbm",
+    "id": "fsv",
     "version": "v1.0.0",
     "repository": "",
     "description": "..."
