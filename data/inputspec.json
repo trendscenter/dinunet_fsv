@@ -39,7 +39,7 @@
       "value": 11
     },
     "num_workers": {
-      "value": 8
+      "value": 2
     },
     "learning_rate": {
       "value": 0.001
@@ -91,7 +91,7 @@
       "value": 11
     },
     "num_workers": {
-      "value": 8
+      "value": 2
     },
     "learning_rate": {
       "value": 0.001
@@ -143,7 +143,7 @@
       "value": 11
     },
     "num_workers": {
-      "value": 8
+      "value": 2
     },
     "learning_rate": {
       "value": 0.001
@@ -175,7 +175,7 @@
       "value": []
     },
     "input_size": {
-      "value": 6
+      "value": 66
     },
     "hidden_sizes": {
       "value": [
@@ -195,7 +195,7 @@
       "value": 11
     },
     "num_workers": {
-      "value": 8
+      "value": 2
     },
     "learning_rate": {
       "value": 0.001
