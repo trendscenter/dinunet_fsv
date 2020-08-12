@@ -1,3 +1,6 @@
 .ipynb_checkpoints
 .idea
 test/output
+test/cache
+test/system
+test/transfer
