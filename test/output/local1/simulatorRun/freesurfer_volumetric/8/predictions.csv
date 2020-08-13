@@ -1,0 +1,9 @@
+file,true_label,prediction,probability
+sub0067_aseg_stats.txt,0,1,0.701
+sub0045_aseg_stats.txt,1,1,0.648
+sub0017_aseg_stats.txt,0,1,0.916
+sub0068_aseg_stats.txt,0,1,0.9
+sub0010_aseg_stats.txt,0,0,0.38
+sub0070_aseg_stats.txt,1,1,0.881
+sub0035_aseg_stats.txt,1,1,0.511
+sub0019_aseg_stats.txt,0,1,0.846
