@@ -75,7 +75,9 @@ if __name__ == "__main__":
     global_score = Prf1a()
     inputspecs = json.loads(open('test/inputspec.json').read())
     args = inputspecs[0]
-    args['epochs']['value'] *= 4
+    args['hidden_sizes']['value'] = [32, 16, 8]
+    args['batch_size']['value'] = 32
+    args['epochs']['value'] = 51
     for fold in range(10):
 
         train_set, val_set = [], []
@@ -84,9 +86,8 @@ if __name__ == "__main__":
             val_set.append(get_dataset(s, conf, fold, 'validation'))
 
         model = nn.DataParallel(MSANNet(in_size=args['input_size']['value'], hidden_sizes=args['hidden_sizes']['value'],
-                                        out_size=args['num_class']['value']))
+                                        out_size=args['num_class']['value'], dropout_in=[]))
         model = model.to(device)
-        torch.manual_seed(244627)
         initialize_weights(model)
         optim = torch.optim.Adam(model.parameters(), lr=args['learning_rate']['value'])
 

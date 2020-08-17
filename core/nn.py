@@ -75,7 +75,7 @@ def iteration(cache, batch, model, optimizer=None, **kw):
         loss.backward()
         if kw.get('avg_grad') is not None:
             for i, param in enumerate(model.parameters()):
-                tensor = kw.get('avg_grad')[i].float().to(kw['device'])
+                tensor = kw.get('avg_grad')[i].to(kw['device'])
                 param.grad.data = torch.autograd.Variable(tensor)
             optimizer.step()
 
@@ -106,7 +106,7 @@ def train(cache, input, state, model, optimizer, dataset_cls, **kw):
     it = iteration(cache, batch, model, optimizer, avg_grad=avg_grads, device=kw['device'])
     cache['train_log'].append([vars(it['loss']), vars(it['score'])])
     out['grads_file'] = 'grads.tar'
-    grads = [p.grad.type(torch.float16) for p in model.parameters()]
+    grads = [p.grad for p in model.parameters()]
     torch.save(grads, state['transferDirectory'] + sep + out['grads_file'])
     return out
 
@@ -190,7 +190,7 @@ def train_n_eval(nn, cache, input, state, dataset_cls, nxt_phase):
         We send confusion matrix to remote for global test score.
         """
         ut.load_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['best_nn_state'])
-        avg, scores = evaluation(cache, state, nn['model'], split_key='validation', device=nn['device'],
+        avg, scores = evaluation(cache, state, nn['model'], split_key='test', device=nn['device'],
                                  save_predictions=True, dataset_cls=dataset_cls)
         out['test_log'] = [vars(avg), vars(scores)]
         out['mode'] = cache['_mode_']
