@@ -190,7 +190,7 @@ def train_n_eval(nn, cache, input, state, dataset_cls, nxt_phase):
         We send confusion matrix to remote for global test score.
         """
         ut.load_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['best_nn_state'])
-        avg, scores = evaluation(cache, state, nn['model'], split_key='test', device=nn['device'],
+        avg, scores = evaluation(cache, state, nn['model'], split_key='validation', device=nn['device'],
                                  save_predictions=True, dataset_cls=dataset_cls)
         out['test_log'] = [vars(avg), vars(scores)]
         out['mode'] = cache['_mode_']
