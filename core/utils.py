@@ -93,7 +93,6 @@ def init_k_folds(cache, state):
     cache['splits'] = dict(zip(range(len(splits)), splits))
     out['num_folds'] = cache['num_folds']
     out['id'] = cache['id']
-    out['batch_size'] = cache['batch_size']
     return out
 
 

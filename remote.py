@@ -53,7 +53,7 @@ def next_run(cache, input, state):
     """**** Parameter Lock ******"""
     out = {}
     for site, site_vars in input.items():
-        out[site] = {'split_ix': cache['fold'], 'batch_size': site_vars['batch_size'] // len(input), 'seed': seed}
+        out[site] = {'split_ix': cache['fold'], 'seed': seed}
     return out
 
 

@@ -45,7 +45,7 @@
       "value": 0.001
     },
     "batch_size": {
-      "value": 64
+      "value": 8
     },
     "id": {
       "value": "freesurfer_volumetric"
@@ -97,7 +97,7 @@
       "value": 0.001
     },
     "batch_size": {
-      "value": 64
+      "value": 8
     },
     "id": {
       "value": "freesurfer_volumetric"
@@ -149,7 +149,7 @@
       "value": 0.001
     },
     "batch_size": {
-      "value": 64
+      "value": 8
     },
     "id": {
       "value": "freesurfer_volumetric"
@@ -201,7 +201,7 @@
       "value": 0.001
     },
     "batch_size": {
-      "value": 64
+      "value": 8
     },
     "id": {
       "value": "freesurfer_volumetric"
