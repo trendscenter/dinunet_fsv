@@ -23,10 +23,10 @@
     },
     "hidden_sizes": {
       "value": [
+        32,
         16,
         8,
-        4,
-        2
+        4
       ]
     },
     "num_class": {
@@ -75,10 +75,10 @@
     },
     "hidden_sizes": {
       "value": [
+        32,
         16,
         8,
-        4,
-        2
+        4
       ]
     },
     "num_class": {
@@ -127,10 +127,10 @@
     },
     "hidden_sizes": {
       "value": [
+        32,
         16,
         8,
-        4,
-        2
+        4
       ]
     },
     "num_class": {
@@ -179,10 +179,10 @@
     },
     "hidden_sizes": {
       "value": [
+        32,
         16,
         8,
-        4,
-        2
+        4
       ]
     },
     "num_class": {
