@@ -38,6 +38,7 @@ def aggregate_sites_info(input):
 
 
 def init_runs(cache, input):
+    cache.update(id=[v['id'] for _, v in input.items()][0])
     cache.update(num_folds=[v['num_folds'] for _, v in input.items()][0])
     cache['folds'] = list(range(cache['num_folds']))[::-1]
 
@@ -48,8 +49,7 @@ def next_run(cache, state):
     """
     cache['fold'] = str(cache['folds'].pop())
     seed = 244627
-    log_dir = '_'.join([str(s) for s in set(f for _, (f, _) in cache['fold'].items())])
-    cache.update(log_dir=state['outputDirectory'] + os.sep + cache['id'] + os.sep + log_dir)
+    cache.update(log_dir=state['outputDirectory'] + os.sep + cache['id'] + os.sep + cache['fold'])
     os.makedirs(cache['log_dir'], exist_ok=True)
 
     cache.update(best_val_score=0)
