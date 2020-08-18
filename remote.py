@@ -4,11 +4,11 @@ import json
 import os
 import shutil
 import sys
-from itertools import repeat
+
+import torch
 
 import core.utils
 from core.measurements import Prf1a, Avg
-import torch
 
 
 # import pydevd_pycharm
@@ -43,7 +43,7 @@ def init_runs(cache, input):
     cache['folds'] = list(range(cache['num_folds']))[::-1]
 
 
-def next_run(cache, state):
+def next_run(cache, input, state):
     """
     This function pops a new fold, lock parameters, and forward init_nn signal to all sites
     """
@@ -164,7 +164,7 @@ if __name__ == "__main__":
         """
         cache['global_test_score'] = []
         init_runs(cache, input)
-        out['run'] = next_run(cache, state)
+        out['run'] = next_run(cache, input, state)
         out['global_modes'] = set_mode(input)
         nxt_phase = 'init_nn'
 
@@ -195,7 +195,7 @@ if __name__ == "__main__":
         save_test_scores(cache, input)
         if len(cache['folds']) > 0:
             out['nn'] = {}
-            out['run'] = next_run(cache, state)
+            out['run'] = next_run(cache, input, state)
             out['global_modes'] = set_mode(input)
             nxt_phase = 'init_nn'
         else:
