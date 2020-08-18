@@ -75,6 +75,7 @@ def iteration(cache, batch, model, optimizer=None, **kw):
 
     if optimizer and model.training:
         loss.backward()
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 31)
         if kw.get('avg_grad') is not None:
             for i, param in enumerate(model.parameters()):
                 tensor = kw.get('avg_grad')[i].float().to(kw['device'])
