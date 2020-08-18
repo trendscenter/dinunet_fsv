@@ -93,9 +93,9 @@ def backward(cache, state, nn, dataset_cls):
     it = iteration(cache, batch, nn)
     it['loss'].backward()
 
-    # norms = [torch.norm(p.grad.detach()) for p in nn['model'].parameters()]
-    # norms_avg = sum(norms) / len(norms)
-    # torch.nn.utils.clip_grad_norm_(nn['model'].parameters(), 31)
+    norms = [torch.norm(p.grad.detach()) for p in nn['model'].parameters()]
+    norms_avg = sum(norms) / len(norms)
+    torch.nn.utils.clip_grad_norm_(nn['model'].parameters(), 31)
 
     out['grads_file'] = 'grads.tar'
     grads = [p.grad.type(torch.float16) for p in nn['model'].parameters()]
