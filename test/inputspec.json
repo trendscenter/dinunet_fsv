@@ -33,10 +33,10 @@
       "value": 2
     },
     "epochs": {
-      "value": 51
+      "value": 31
     },
     "patience": {
-      "value": 31
+      "value": 21
     },
     "num_workers": {
       "value": 2
@@ -45,7 +45,7 @@
       "value": 0.001
     },
     "batch_size": {
-      "value": 16
+      "value": 8
     },
     "id": {
       "value": "freesurfer_volumetric"
@@ -85,10 +85,10 @@
       "value": 2
     },
     "epochs": {
-      "value": 51
+      "value": 31
     },
     "patience": {
-      "value": 31
+      "value": 21
     },
     "num_workers": {
       "value": 2
@@ -97,7 +97,7 @@
       "value": 0.001
     },
     "batch_size": {
-      "value": 32
+      "value": 8
     },
     "id": {
       "value": "freesurfer_volumetric"
@@ -137,10 +137,10 @@
       "value": 2
     },
     "epochs": {
-      "value": 51
+      "value": 31
     },
     "patience": {
-      "value": 31
+      "value": 21
     },
     "num_workers": {
       "value": 2
@@ -149,7 +149,7 @@
       "value": 0.001
     },
     "batch_size": {
-      "value": 16
+      "value": 8
     },
     "id": {
       "value": "freesurfer_volumetric"
@@ -189,10 +189,10 @@
       "value": 2
     },
     "epochs": {
-      "value": 51
+      "value": 31
     },
     "patience": {
-      "value": 31
+      "value": 21
     },
     "num_workers": {
       "value": 2
@@ -201,7 +201,7 @@
       "value": 0.001
     },
     "batch_size": {
-      "value": 16
+      "value": 8
     },
     "id": {
       "value": "freesurfer_volumetric"

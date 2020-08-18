@@ -94,7 +94,7 @@ if __name__ == "__main__":
         """
         Train/validation and test phases
         """
-        nn = init_nn(cache, state, init_weights=False)
+        nn = init_nn(cache, state, init_weights=True)
         out_, nxt_phase = train_n_eval(nn, cache, input, state, FreeSurferDataset, nxt_phase)
         out.update(**out_)
 

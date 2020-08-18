@@ -10,14 +10,14 @@ from core.measurements import new_metrics, Avg
 from core.utils import save_logs
 
 
-def next_iter(cache):
+def next_iter(cache, move_cursor):
     out = {}
-    cache['cursor'] += cache['batch_size']
-    if cache['cursor'] >= cache['data_len']:
-        out['mode'] = 'val_waiting'
-        cache['cursor'] = 0
-        random.shuffle(cache['data_indices'])
-
+    if move_cursor:
+        cache['cursor'] += cache['batch_size']
+        if cache['cursor'] >= cache['data_len']:
+            out['mode'] = 'val_waiting'
+            cache['cursor'] = 0
+            random.shuffle(cache['data_indices'])
     return out
 
 
@@ -54,6 +54,8 @@ def init_dataset(cache, state, datset_cls, min_batch_size=4):
     dataset = datset_cls(cache=cache, state=state, mode=cache['mode'])
     split = json.loads(open(cache['split_dir'] + sep + cache['split_file']).read())
     dataset.load_indices(files=split['train'])
+    # dataset.indices = dataset.indices[:16]
+
     cache['data_indices'] = dataset.indices
     if len(dataset) % cache['batch_size'] >= min_batch_size:
         cache['data_len'] = len(dataset)
@@ -75,7 +77,7 @@ def iteration(cache, batch, model, optimizer=None, **kw):
         loss.backward()
         if kw.get('avg_grad') is not None:
             for i, param in enumerate(model.parameters()):
-                tensor = kw.get('avg_grad')[i].to(kw['device'])
+                tensor = kw.get('avg_grad')[i].float().to(kw['device'])
                 param.grad.data = torch.autograd.Variable(tensor)
             optimizer.step()
 
@@ -106,7 +108,7 @@ def train(cache, input, state, model, optimizer, dataset_cls, **kw):
     it = iteration(cache, batch, model, optimizer, avg_grad=avg_grads, device=kw['device'])
     cache['train_log'].append([vars(it['loss']), vars(it['score'])])
     out['grads_file'] = 'grads.tar'
-    grads = [p.grad for p in model.parameters()]
+    grads = [p.grad.type(torch.float16) for p in model.parameters()]
     torch.save(grads, state['transferDirectory'] + sep + out['grads_file'])
     return out
 
@@ -153,6 +155,7 @@ def evaluation(cache, state, model, split_key, dataset_cls, **kw):
 def train_n_eval(nn, cache, input, state, dataset_cls, nxt_phase):
     out = {}
     out['mode'] = input['global_modes'].get(state['clientId'], cache['mode'])
+    do_validation = all([gm == 'val_waiting' for gm in input['global_modes'].values()])
 
     if input.get('save_current_as_best'):
         ut.load_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['current_nn_state'])
@@ -170,9 +173,9 @@ def train_n_eval(nn, cache, input, state, dataset_cls, nxt_phase):
             **train(cache, input, state, nn['model'], nn['optimizer'],
                     device=nn['device'], dataset_cls=dataset_cls))
         ut.save_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['current_nn_state'])
-        out.update(**next_iter(cache))
+        out.update(**next_iter(cache, not do_validation))
 
-    elif out['mode'] == 'validation':
+    if all([gm == 'val_waiting' for gm in input['global_modes'].values()]):
         """
         Once all sites are in 'val_waiting' status, remote issues 'validation' signal. 
         Once all sites run validation phase, they go to 'train_waiting' status. 
@@ -190,7 +193,7 @@ def train_n_eval(nn, cache, input, state, dataset_cls, nxt_phase):
         We send confusion matrix to remote for global test score.
         """
         ut.load_checkpoint(cache, nn['model'], nn['optimizer'], id=cache['best_nn_state'])
-        avg, scores = evaluation(cache, state, nn['model'], split_key='validation', device=nn['device'],
+        avg, scores = evaluation(cache, state, nn['model'], split_key='test', device=nn['device'],
                                  save_predictions=True, dataset_cls=dataset_cls)
         out['test_log'] = [vars(avg), vars(scores)]
         out['mode'] = cache['_mode_']
