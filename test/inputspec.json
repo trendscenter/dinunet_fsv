@@ -1,0 +1,277 @@
+[
+  {
+    "data_dir": {
+      "value": "volumes_0"
+    },
+    "label_dir": {
+      "value": "labels_0"
+    },
+    "split_dir": {
+      "value": "splits_0"
+    },
+    "num_folds": {
+      "value": 10
+    },
+    "mode": {
+      "value": "train"
+    },
+    "gpus": {
+      "value": []
+    },
+    "input_size": {
+      "value": 66
+    },
+    "hidden_sizes": {
+      "value": [
+        256,
+        128,
+        64,
+        32
+      ]
+    },
+    "num_class": {
+      "value": 2
+    },
+    "epochs": {
+      "value": 101
+    },
+    "patience": {
+      "value": 31
+    },
+    "num_workers": {
+      "value": 2
+    },
+    "learning_rate": {
+      "value": 0.001
+    },
+    "batch_size": {
+      "value": 8
+    },
+    "seed": {
+      "value": 12938
+    },
+    "id": {
+      "value": "freesurfer_volumetric"
+    }
+  },
+  {
+    "data_dir": {
+      "value": "volumes_1"
+    },
+    "label_dir": {
+      "value": "labels_1"
+    },
+    "split_dir": {
+      "value": "splits_1"
+    },
+    "num_folds": {
+      "value": 10
+    },
+    "mode": {
+      "value": "train"
+    },
+    "gpus": {
+      "value": []
+    },
+    "input_size": {
+      "value": 66
+    },
+    "hidden_sizes": {
+      "value": [
+        256,
+        128,
+        64,
+        32
+      ]
+    },
+    "num_class": {
+      "value": 2
+    },
+    "epochs": {
+      "value": 101
+    },
+    "patience": {
+      "value": 31
+    },
+    "num_workers": {
+      "value": 2
+    },
+    "learning_rate": {
+      "value": 0.001
+    },
+    "batch_size": {
+      "value": 8
+    },
+    "seed": {
+      "value": 12938
+    },
+    "id": {
+      "value": "freesurfer_volumetric"
+    }
+  },
+  {
+    "data_dir": {
+      "value": "volumes_2"
+    },
+    "label_dir": {
+      "value": "labels_2"
+    },
+    "split_dir": {
+      "value": "splits_2"
+    },
+    "num_folds": {
+      "value": 10
+    },
+    "mode": {
+      "value": "train"
+    },
+    "gpus": {
+      "value": []
+    },
+    "input_size": {
+      "value": 66
+    },
+    "hidden_sizes": {
+      "value": [
+        256,
+        128,
+        64,
+        32
+      ]
+    },
+    "num_class": {
+      "value": 2
+    },
+    "epochs": {
+      "value": 101
+    },
+    "patience": {
+      "value": 31
+    },
+    "num_workers": {
+      "value": 2
+    },
+    "learning_rate": {
+      "value": 0.001
+    },
+    "batch_size": {
+      "value": 8
+    },
+    "seed": {
+      "value": 12938
+    },
+    "id": {
+      "value": "freesurfer_volumetric"
+    }
+  },
+  {
+    "data_dir": {
+      "value": "volumes_3"
+    },
+    "label_dir": {
+      "value": "labels_3"
+    },
+    "split_dir": {
+      "value": "splits_3"
+    },
+    "num_folds": {
+      "value": 10
+    },
+    "mode": {
+      "value": "train"
+    },
+    "gpus": {
+      "value": []
+    },
+    "input_size": {
+      "value": 66
+    },
+    "hidden_sizes": {
+      "value": [
+        256,
+        128,
+        64,
+        32
+      ]
+    },
+    "num_class": {
+      "value": 2
+    },
+    "epochs": {
+      "value": 101
+    },
+    "patience": {
+      "value": 31
+    },
+    "num_workers": {
+      "value": 2
+    },
+    "learning_rate": {
+      "value": 0.001
+    },
+    "batch_size": {
+      "value": 8
+    },
+    "seed": {
+      "value": 12938
+    },
+    "id": {
+      "value": "freesurfer_volumetric"
+    }
+  },
+  {
+    "data_dir": {
+      "value": "volumes_4"
+    },
+    "label_dir": {
+      "value": "labels_4"
+    },
+    "split_dir": {
+      "value": "splits_4"
+    },
+    "num_folds": {
+      "value": 10
+    },
+    "mode": {
+      "value": "train"
+    },
+    "gpus": {
+      "value": []
+    },
+    "input_size": {
+      "value": 66
+    },
+    "hidden_sizes": {
+      "value": [
+        256,
+        128,
+        64,
+        32
+      ]
+    },
+    "num_class": {
+      "value": 2
+    },
+    "epochs": {
+      "value": 101
+    },
+    "patience": {
+      "value": 31
+    },
+    "num_workers": {
+      "value": 2
+    },
+    "learning_rate": {
+      "value": 0.001
+    },
+    "batch_size": {
+      "value": 8
+    },
+    "seed": {
+      "value": 12938
+    },
+    "id": {
+      "value": "freesurfer_volumetric"
+    }
+  }
+]
