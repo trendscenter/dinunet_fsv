@@ -45,7 +45,7 @@
       "value": 0.001
     },
     "batch_size": {
-      "value": 8
+      "value": 16
     },
     "seed": {
       "value": 12938
@@ -100,7 +100,7 @@
       "value": 0.001
     },
     "batch_size": {
-      "value": 8
+      "value": 16
     },
     "seed": {
       "value": 12938
@@ -155,7 +155,7 @@
       "value": 0.001
     },
     "batch_size": {
-      "value": 8
+      "value": 16
     },
     "seed": {
       "value": 12938
@@ -210,7 +210,7 @@
       "value": 0.001
     },
     "batch_size": {
-      "value": 8
+      "value": 16
     },
     "seed": {
       "value": 12938
@@ -265,7 +265,7 @@
       "value": 0.001
     },
     "batch_size": {
-      "value": 8
+      "value": 16
     },
     "seed": {
       "value": 12938
