@@ -1,6 +1,0 @@
-file,true_label,prediction,probability
-sub0046_aseg_stats.txt,1,1,0.885
-sub0011_aseg_stats.txt,1,1,0.508
-sub0038_aseg_stats.txt,0,1,0.513
-sub0027_aseg_stats.txt,1,1,0.566
-sub0045_aseg_stats.txt,1,1,0.508
