@@ -54,7 +54,6 @@ def init_dataset(cache, state, datset_cls, min_batch_size=4):
     dataset = datset_cls(cache=cache, state=state, mode=cache['mode'])
     split = json.loads(open(cache['split_dir'] + sep + cache['split_file']).read())
     dataset.load_indices(files=split['train'])
-    dataset.indices = dataset.indices[:16]
 
     cache['data_indices'] = dataset.indices
     if len(dataset) % cache['batch_size'] >= min_batch_size:
