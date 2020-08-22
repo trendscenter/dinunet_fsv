@@ -1,0 +1,6 @@
+file,true_label,prediction,probability
+subject22_aseg_stats.txt,1,1,0.978
+subject39_aseg_stats.txt,1,1,0.762
+subject1_aseg_stats.txt,0,0,0.0
+subject19_aseg_stats.txt,1,1,0.999
+subject33_aseg_stats.txt,1,1,0.866
