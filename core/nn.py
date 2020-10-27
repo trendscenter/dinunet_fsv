@@ -6,6 +6,7 @@ import numpy as np
 import torch
 from torch.nn import functional as F
 
+from core import constants as cs
 from core import utils as ut
 from core.measurements import new_metrics, Avg
 from core.utils import save_logs
@@ -91,17 +92,26 @@ def backward(cache, state, nn, dataset_cls):
     batch = get_next_batch(cache, state, dataset_cls)
     it = iteration(cache, batch, nn)
     it['loss'].backward()
-    out['grads_file'] = 'grads.npy'
-    grads = [p.grad.detach().cpu().numpy() for p in nn['model'].parameters()]
-    np.save(state['transferDirectory'] + sep + out['grads_file'], np.array(grads))
+    out['grads_file'] = cs.grads_file
+    if cs.is_format_numpy:
+        grads = [p.grad.type(torch.float16).detach().cpu().numpy() for p in nn['model'].parameters()]
+        np.save(state['transferDirectory'] + sep + out['grads_file'], np.asarray(grads))
+    elif cs.is_format_torch:
+        grads = [p.grad.type(cs.float_precision) for p in nn['model'].parameters()]
+        torch.save(grads, state['transferDirectory'] + sep + out['grads_file'])
+
     cache['train_log'].append([vars(it['avg_loss']), vars(it['score'])])
     return out
 
 
 def step(input, state, nn):
-    avg_grads = np.load(state['baseDirectory'] + sep + input['avg_grads'], allow_pickle=True)
+    if cs.is_format_numpy:
+        avg_grads = np.load(state['baseDirectory'] + sep + input['avg_grads'], allow_pickle=True)
+    if cs.is_format_torch:
+        avg_grads = torch.load(state['baseDirectory'] + sep + input['avg_grads'])
+
     for i, param in enumerate(nn['model'].parameters()):
-        param.grad = torch.tensor(avg_grads[i]).to(nn['device'])
+        param.grad = torch.tensor(avg_grads[i], dtype=torch.float32).to(nn['device'])
     nn['optimizer'].step()
 
 

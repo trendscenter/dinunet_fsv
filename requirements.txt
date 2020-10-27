@@ -7,3 +7,4 @@ scikit-learn~=0.23.0
 torch==1.5.1+cu92
 -f https://download.pytorch.org/whl/torch_stable.html
 torchvision==0.6.1+cu92
+coinstac-pyprofiler==0.0.1

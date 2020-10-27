@@ -1,4 +1,4 @@
-FROM coinstacteam/coinstac-base:cuda-9.2
+FROM coinstacteam/coinstac-base:python3.7-buster
 
 # Copy the current directory contents into the container
 COPY ./requirements.txt /computation/requirements.txt

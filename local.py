@@ -7,16 +7,19 @@ from os import sep
 
 import pandas as pd
 import torch
+from coinstac_pyprofiler import custom_profiler as cprof
 
+from core import constants as cs
 from core import utils as ut
 from core.nn import train_n_eval, init_dataset
 from core.utils import init_k_folds, NNDataset, initialize_weights
 from models import MSANNet
 
-
 # import pydevd_pycharm
 #
 # pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
+
+input_args = json.loads(sys.stdin.read())
 
 
 class FreeSurferDataset(NNDataset):
@@ -57,9 +60,9 @@ def init_nn(cache, state, init_weights=False):
     return {'device': device, 'model': model.to(device), 'optimizer': optimizer}
 
 
-if __name__ == "__main__":
-
-    args = json.loads(sys.stdin.read())
+@cprof.profile(type="pyinstrument",
+               output_file_prefix=ut.get_output_file_path_and_prefix(input_args, cs.profile_log_dir_name))
+def start_computation(args):
     cache = args['cache']
     input = args['input']
     state = args['state']
@@ -68,7 +71,7 @@ if __name__ == "__main__":
     nxt_phase = input.get('phase', 'init_runs')
     if nxt_phase == 'init_runs':
         """
-        Generate folds as specified. 
+        Generate folds as specified.
         """
         cache.update(**input)
         out.update(**init_k_folds(cache, state))
@@ -109,3 +112,9 @@ if __name__ == "__main__":
     output = json.dumps({'output': out, 'cache': cache})
     sys.stdout.write(output)
     args, cache, input, state, out, output = [None] * 6
+
+    return
+
+
+if __name__ == "__main__":
+    start_computation(input_args)

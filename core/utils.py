@@ -198,3 +198,9 @@ def get_safe_batch_size(batch_size, dataset_len):
         if dataset_len % i > 1:
             return i
     return dataset_len
+
+
+def get_output_file_path_and_prefix(args, out_dir):
+    dir_name=os.path.join(args['state']['outputDirectory'], 'profiler_log', out_dir)
+    os.makedirs(dir_name, exist_ok=True)
+    return os.path.join(os.path.abspath(dir_name), args['state']['clientId'] )

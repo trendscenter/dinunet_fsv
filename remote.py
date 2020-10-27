@@ -7,17 +7,21 @@ import shutil
 import sys
 
 import numpy as np
+import torch
+from coinstac_pyprofiler import custom_profiler as cprof
 
-import core.utils
+import core.utils as ut
+from core import constants as cs
 from core.measurements import Prf1a, Avg
-
 
 # import pydevd_pycharm
 #
 # pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
 
+input_args = json.loads(sys.stdin.read())
 
-def aggregate_sites_info(input):
+
+def aggregate_sites_info(input, state):
     """
     Average each sites gradients and pass it to all sites.
     """
@@ -25,12 +29,25 @@ def aggregate_sites_info(input):
     grads = []
     for site, site_vars in input.items():
         grad_file = state['baseDirectory'] + os.sep + site + os.sep + site_vars['grads_file']
-        grads.append(np.load(grad_file, allow_pickle=True))
-    out['avg_grads'] = 'avg_grads.npy'
+        if cs.is_format_torch: grads.append(torch.load(grad_file))
+        if cs.is_format_numpy: grads.append(np.load(grad_file, allow_pickle=True))
+    out['avg_grads'] = cs.avg_grads_file
     avg_grads = []
-    for layer_grad in zip(*grads):
-        avg_grads.append(np.array(layer_grad).mean(0))
-    np.save(state['transferDirectory'] + os.sep + out['avg_grads'], np.array(avg_grads))
+
+    if cs.is_format_numpy:
+        numpy_float_precision = np.float16 if str(cs.float_precision).endswith('float16') else np.float
+        for layer_grad in zip(*grads):
+            avg_grads.append(np.array(layer_grad, dtype=numpy_float_precision).mean(0))
+        np.save(state['transferDirectory'] + os.sep + out['avg_grads'], np.array(avg_grads))
+    elif cs.is_format_torch:
+        for layer_grad in zip(*grads):
+            """
+            RuntimeError: "sum_cpu" not implemented for 'Half' so must convert to float32.
+            """
+            layer_grad = [lg.type(torch.float32).cpu() for lg in layer_grad]
+            avg_grads.append(torch.stack(layer_grad).mean(0).type(cs.float_precision))
+        torch.save(avg_grads, state['transferDirectory'] + os.sep + out['avg_grads'])
+
     return out
 
 
@@ -106,7 +123,7 @@ def on_epoch_end(cache, input):
         out['save_current_as_best'] = True
     else:
         out['save_current_as_best'] = False
-    core.utils.save_logs(cache, plot_keys=['train_log', 'validation_log'], log_dir=cache['log_dir'])
+    ut.save_logs(cache, plot_keys=['train_log', 'validation_log'], log_dir=cache['log_dir'])
     return out
 
 
@@ -127,8 +144,8 @@ def save_test_scores(cache, input):
     cache['test_log'].append([test_loss.average, *test_prfa.prfa()])
     cache['test_scores'] = json.dumps(vars(test_prfa))
     cache['global_test_score'].append(vars(test_prfa))
-    core.utils.save_logs(cache, plot_keys=['train_log', 'validation_log'], file_keys=['test_log', 'test_scores'],
-                         log_dir=cache['log_dir'])
+    ut.save_logs(cache, plot_keys=['train_log', 'validation_log'], file_keys=['test_log', 'test_scores'],
+                 log_dir=cache['log_dir'])
 
 
 def send_global_scores(cache, state):
@@ -138,8 +155,8 @@ def send_global_scores(cache, state):
         score.update(tp=sc['tp'], tn=sc['tn'], fn=sc['fn'], fp=sc['fp'])
     cache['global_test_score'] = ['Precision,Recall,F1,Accuracy']
     cache['global_test_score'].append(score.prfa())
-    core.utils.save_logs(cache, file_keys=['global_test_score'],
-                         log_dir=state['outputDirectory'] + os.sep + cache['id'])
+    ut.save_logs(cache, file_keys=['global_test_score'],
+                 log_dir=state['outputDirectory'] + os.sep + cache['id'])
 
     out['results_zip'] = f"{cache['id']}_" + '_'.join(str(datetime.datetime.now()).split(' '))
     shutil.make_archive(f"{state['transferDirectory']}{os.sep}{out['results_zip']}", 'zip', cache['log_dir'])
@@ -153,8 +170,9 @@ def set_mode(input, mode=None):
     return out
 
 
-if __name__ == "__main__":
-    args = json.loads(sys.stdin.read())
+@cprof.profile(type="pyinstrument",
+               output_file_prefix=ut.get_output_file_path_and_prefix(input_args, cs.profile_log_dir_name))
+def start_computation(args):
     cache = args['cache']
     input = args['input']
     state = args['state']
@@ -179,7 +197,7 @@ if __name__ == "__main__":
         nxt_phase = 'computation'
         out['global_modes'] = set_mode(input)
         if check(all, 'grads_file', 'grads.npy', input):
-            out.update(**aggregate_sites_info(input))
+            out.update(**aggregate_sites_info(input, state))
 
         if check(all, 'mode', 'val_waiting', input):
             out['global_modes'] = set_mode(input, mode='validation')
@@ -212,3 +230,9 @@ if __name__ == "__main__":
     output = json.dumps({'output': out, 'cache': cache, 'success': check(all, 'phase', 'success', input)})
     sys.stdout.write(output)
     args, cache, input, state, out, output = [None] * 6
+
+    return
+
+
+if __name__ == "__main__":
+    start_computation(input_args)
