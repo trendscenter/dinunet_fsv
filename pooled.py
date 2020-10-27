@@ -7,18 +7,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import ConcatDataset
 
+from core.datasets import PooledDataset
 from core.measurements import Prf1a
 from core.utils import initialize_weights, NNDataLoader
-from local import FreeSurferDataset
 from models import MSANNet
-
-
-class PooledDataset(FreeSurferDataset):
-    def __init__(self, **kw):
-        super().__init__(**kw)
-        self.data_dir = kw['data_dir']
-        self.label_dir = kw['label_dir']
-        self.mode = kw['mode']
 
 
 def get_dataset(site, conf, fold, split_key=None):

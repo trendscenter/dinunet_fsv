@@ -5,14 +5,14 @@ import shutil
 import sys
 from os import sep
 
-import pandas as pd
 import torch
 from coinstac_pyprofiler import custom_profiler as cprof
 
 from core import constants as cs
 from core import utils as ut
+from core.datasets import FreeSurferDataset
 from core.nn import train_n_eval, init_dataset
-from core.utils import init_k_folds, NNDataset, initialize_weights
+from core.utils import init_k_folds, initialize_weights
 from models import MSANNet
 
 # import pydevd_pycharm
@@ -20,28 +20,6 @@ from models import MSANNet
 # pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
 
 input_args = json.loads(sys.stdin.read())
-
-
-class FreeSurferDataset(NNDataset):
-    def __init__(self, **kw):
-        super().__init__(**kw)
-
-    def load_indices(self, files, **kw):
-        labels_file = os.listdir(self.label_dir)[0]
-        labels = pd.read_csv(self.label_dir + os.sep + labels_file).set_index('freesurferfile')
-        for file in files:
-            y = labels.loc[file]['label']
-            """
-            int64 could not be json serializable.
-            """
-            self.indices.append([file, int(y)])
-
-    def __getitem__(self, ix):
-        file, y = self.indices[ix]
-        df = pd.read_csv(self.data_dir + os.sep + file, sep='\t', names=['File', file], skiprows=1)
-        df = df.set_index(df.columns[0])
-        x = df.T.iloc[0].values
-        return {'inputs': torch.tensor(x), 'labels': torch.tensor(y), 'ix': torch.tensor(ix)}
 
 
 def init_nn(cache, state, init_weights=False):
