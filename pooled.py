@@ -5,12 +5,15 @@ import os
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from coinstac_pyprofiler import custom_profiler as cprof
 from torch.utils.data import ConcatDataset
 
 from core.datasets import PooledDataset
 from core.measurements import Prf1a
 from core.utils import initialize_weights, NNDataLoader
 from models import MSANNet
+
+pooled_log_output_dir = "./pooled_log/pooled_epoch_101_bs_32"
 
 
 def get_dataset(site, conf, fold, split_key=None):
@@ -28,11 +31,12 @@ def eval(data_loader, model, device):
     score = Prf1a()
     for i, batch in enumerate(data_loader):
         inputs, labels = batch['inputs'].to(device).float(), batch['labels'].to(device).long()
-        out = F.log_softmax(model(inputs), 1)
-        _, preds = torch.max(out, 1)
-        sc = Prf1a()
-        sc.add(preds, labels)
-        score.accumulate(sc)
+        if inputs.shape[0] > 1:
+            out = F.log_softmax(model(inputs), 1)
+            _, preds = torch.max(out, 1)
+            sc = Prf1a()
+            sc.add(preds, labels)
+            score.accumulate(sc)
     return score
 
 
@@ -60,7 +64,8 @@ def train(fold, model, optim, device, args, train_loader, val_loader):
         if val_score.f1 > best_score:
             best_score = val_score.f1
             best_ep = ep
-            torch.save(model.state_dict(), f'pooled_log/best_{fold}.pt')
+            torch.save(model.state_dict(), os.path.join(pooled_log_output_dir, f'best_{fold}.pt'))
+
             print(f'##### *** BEST saved ***  {best_score}')
         else:
             print('###### Not Improved:', val_score.f1, best_score)
@@ -69,18 +74,12 @@ def train(fold, model, optim, device, args, train_loader, val_loader):
             break
 
 
-if __name__ == "__main__":
+@cprof.profile(type="pyinstrument", output_file_prefix=pooled_log_output_dir, params_dict={'save_html': True})
+def start_training(args):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    os.makedirs('pooled_log', exist_ok=True)
+    os.makedirs(pooled_log_output_dir, exist_ok=True)
     global_score = Prf1a()
-    inputspecs = json.loads(open('test/inputspec.json').read())
-    args = inputspecs[0]
-    args['epochs']['value'] = 101
-    args['batch_size']['value'] = 32
-    args['patience']['value'] = 31
-    # args['hidden_sizes']['value'] = [256, 128, 64, 32]
 
-    # inputspecs = [inputspecs[0]]
     for fold in range(10):
 
         train_set, val_set = [], []
@@ -102,7 +101,8 @@ if __name__ == "__main__":
             val_dset = ConcatDataset(val_set)
             val_loader = NNDataLoader.new(dataset=val_dset, batch_size=args['batch_size']['value'], pin_memory=True,
                                           shuffle=True)
-            print(f'Fold {fold}:', len(train_dset), len(val_dset))
+            print(f'Fold {fold}:', "Length of training dataset: ", len(train_dset), "Length of validation dataset: ",
+                  +                  len(val_dset))
             train(fold, model, optim, device, args, train_loader, val_loader)
             run_test = True
 
@@ -113,15 +113,26 @@ if __name__ == "__main__":
             test_dset = ConcatDataset(test_set)
             test_loader = NNDataLoader.new(dataset=test_dset, batch_size=args['batch_size']['value'], pin_memory=True,
                                            shuffle=True)
-            model.load_state_dict(torch.load(f'pooled_log/best_{fold}.pt'))
+            model.load_state_dict(torch.load(os.path.join(pooled_log_output_dir, f'best_{fold}.pt')))
 
-            print(f'Fold {fold}:', len(test_dset))
+            print(f'Fold {fold}:', "Length of validation dataset: ", len(test_dset))
             test_score = eval(test_loader, model, device)
             global_score.accumulate(test_score)
-            with open(f'pooled_log/{fold}_prfa.txt', 'w') as wr:
+            with open(os.path.join(pooled_log_output_dir, f'{fold}_prfa.txt'), 'w') as wr:
                 wr.write(f'{test_score.prfa()}')
                 wr.flush()
 
-    with open(f'pooled_log/global_prfa.txt', 'w') as wr:
+    with open(os.path.join(pooled_log_output_dir, f'global_prfa.txt'), 'w') as wr:
         wr.write(f'{global_score.prfa()}')
         wr.flush()
+
+
+if __name__ == "__main__":
+    inputspecs = json.loads(open('test/inputspec.json').read())
+    args = inputspecs[0]
+    args['epochs']['value'] = 101
+    args['batch_size']['value'] = 32
+    args['patience']['value'] = 31
+    # args['hidden_sizes']['value'] = [256, 128, 64, 32]
+
+    start_training(args)
