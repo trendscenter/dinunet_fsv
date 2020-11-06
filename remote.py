@@ -196,7 +196,7 @@ def start_computation(args):
         """
         nxt_phase = 'computation'
         out['global_modes'] = set_mode(input)
-        if check(all, 'grads_file', 'grads.npy', input):
+        if check(all, 'grads_file', cs.grads_file, input):
             out.update(**aggregate_sites_info(input, state))
 
         if check(all, 'mode', 'val_waiting', input):
