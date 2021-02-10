@@ -32,26 +32,11 @@
     "num_class": {
       "value": 2
     },
-    "epochs": {
-      "value": 101
-    },
-    "patience": {
-      "value": 31
-    },
     "num_workers": {
       "value": 2
     },
     "learning_rate": {
       "value": 0.001
-    },
-    "batch_size": {
-      "value": 16
-    },
-    "seed": {
-      "value": 12938
-    },
-    "id": {
-      "value": "freesurfer_volumetric"
     }
   },
   {
@@ -87,26 +72,11 @@
     "num_class": {
       "value": 2
     },
-    "epochs": {
-      "value": 101
-    },
-    "patience": {
-      "value": 31
-    },
     "num_workers": {
       "value": 2
     },
     "learning_rate": {
       "value": 0.001
-    },
-    "batch_size": {
-      "value": 16
-    },
-    "seed": {
-      "value": 12938
-    },
-    "id": {
-      "value": "freesurfer_volumetric"
     }
   },
   {
@@ -142,26 +112,11 @@
     "num_class": {
       "value": 2
     },
-    "epochs": {
-      "value": 101
-    },
-    "patience": {
-      "value": 31
-    },
     "num_workers": {
       "value": 2
     },
     "learning_rate": {
       "value": 0.001
-    },
-    "batch_size": {
-      "value": 16
-    },
-    "seed": {
-      "value": 12938
-    },
-    "id": {
-      "value": "freesurfer_volumetric"
     }
   },
   {
@@ -197,26 +152,11 @@
     "num_class": {
       "value": 2
     },
-    "epochs": {
-      "value": 101
-    },
-    "patience": {
-      "value": 31
-    },
     "num_workers": {
       "value": 2
     },
     "learning_rate": {
       "value": 0.001
-    },
-    "batch_size": {
-      "value": 16
-    },
-    "seed": {
-      "value": 12938
-    },
-    "id": {
-      "value": "freesurfer_volumetric"
     }
   },
   {
@@ -252,26 +192,11 @@
     "num_class": {
       "value": 2
     },
-    "epochs": {
-      "value": 101
-    },
-    "patience": {
-      "value": 31
-    },
     "num_workers": {
       "value": 2
     },
     "learning_rate": {
       "value": 0.001
-    },
-    "batch_size": {
-      "value": 16
-    },
-    "seed": {
-      "value": 12938
-    },
-    "id": {
-      "value": "freesurfer_volumetric"
     }
   }
 ]

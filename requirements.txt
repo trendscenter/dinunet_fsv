@@ -1,10 +1,6 @@
-pandas~=1.0.3
-numpy~=1.18.4
-matplotlib==3.2.1
-pydevd-pycharm~=201.7223.92
-scikit-learn~=0.23.0
+pydevd-pycharm==203.7148.72
+coinstac-dinunet>=0.7
 -f https://download.pytorch.org/whl/torch_stable.html
 torch==1.5.1+cu92
 -f https://download.pytorch.org/whl/torch_stable.html
 torchvision==0.6.1+cu92
-coinstac-pyprofiler==0.1.0

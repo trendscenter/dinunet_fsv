@@ -1,8 +1,0 @@
-file,true_label,prediction,probability
-subject8_aseg_stats.txt,1,1,1.0
-subject50_aseg_stats.txt,0,0,0.04
-subject31_aseg_stats.txt,0,0,0.008
-subject28_aseg_stats.txt,0,0,0.002
-subject7_aseg_stats.txt,1,1,0.999
-subject68_aseg_stats.txt,0,0,0.275
-subject3_aseg_stats.txt,1,1,0.979
