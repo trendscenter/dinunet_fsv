@@ -5,13 +5,12 @@ import sys
 import pandas as pd
 import torch
 from coinstac_dinunet import COINNDataset, COINNTrainer, COINNLocal
+from coinstac_dinunet.metrics import Prf1a
 import torch.nn.functional as F
 import json
 
 from model import MSANNet
 
-
-#
 # import pydevd_pycharm
 # pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
 
@@ -71,6 +70,9 @@ class FreeSurferTrainer(COINNTrainer):
 
     def _set_log_headers(self):
         self.cache['log_header'] = 'loss,accuracy,f1'
+
+    def new_metrics(self):
+        return Prf1a()
 
 
 if __name__ == "__main__":
