@@ -15,7 +15,7 @@ class FSRemote(COINNRemote):
         self.cache['monitor_metric'] = 'f1', 'maximize'
 
     def _set_log_headers(self):
-        self.cache['log_header'] = 'loss,accuracy,f1'
+        self.cache['log_header'] = 'Loss|Accuracy,F1'
 
     def _new_metrics(self):
         return Prf1a()

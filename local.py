@@ -12,6 +12,7 @@ import json
 from model import MSANNet
 
 # import pydevd_pycharm
+#
 # pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
 
 
@@ -69,7 +70,7 @@ class FreeSurferTrainer(COINNTrainer):
         self.cache['monitor_metric'] = 'f1', 'maximize'
 
     def _set_log_headers(self):
-        self.cache['log_header'] = 'loss,accuracy,f1'
+        self.cache['log_header'] = 'Loss|Accuracy,F1'
 
     def new_metrics(self):
         return Prf1a()
@@ -77,8 +78,9 @@ class FreeSurferTrainer(COINNTrainer):
 
 if __name__ == "__main__":
     args = json.loads(sys.stdin.read())
-    local = COINNLocal(cache=args['cache'], input=args['input'],
-                       state=args['state'], epochs=111, patience=21,
-                       pretrain_epochs=21, computation_id='fsv_volumes_pretrained')
+
+    pretrain_args = {'epochs': 51, "gpus": [0, 1], 'batch_size': 32}
+    local = COINNLocal(cache=args['cache'], input=args['input'], pretrain_args=pretrain_args,
+                       state=args['state'], epochs=111, patience=21, computation_id='fsv_volumes2')
     local.compute(FreeSurferDataset, FreeSurferTrainer)
     local.send()
