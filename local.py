@@ -81,6 +81,6 @@ if __name__ == "__main__":
 
     pretrain_args = {'epochs': 51, 'batch_size': 16}
     local = COINNLocal(cache=args['cache'], input=args['input'], pretrain_args=pretrain_args,
-                       state=args['state'], epochs=111, patience=21, computation_id='fsv_volumes2')
+                       state=args['state'], epochs=111, patience=21, computation_id='fsv_quick')
     local.compute(FreeSurferDataset, FreeSurferTrainer)
     local.send()
