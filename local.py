@@ -79,7 +79,7 @@ class FreeSurferTrainer(COINNTrainer):
 if __name__ == "__main__":
     args = json.loads(sys.stdin.read())
 
-    pretrain_args = {'epochs': 51, "gpus": [0, 1], 'batch_size': 32}
+    pretrain_args = {'epochs': 51, 'batch_size': 16}
     local = COINNLocal(cache=args['cache'], input=args['input'], pretrain_args=pretrain_args,
                        state=args['state'], epochs=111, patience=21, computation_id='fsv_volumes2')
     local.compute(FreeSurferDataset, FreeSurferTrainer)
