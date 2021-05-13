@@ -10,8 +10,9 @@
     "type": "docker",
     "dockerImage": "fsv",
     "command": [
-      "python",
-      "\/computation\/local.py"
+      "python", "\/computation\/local.py",
+      "--profile", "True",
+      "--profiler_gather_freq", "10"
     ],
     "remote": {
       "type": "docker",

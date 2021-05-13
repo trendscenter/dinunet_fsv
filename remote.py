@@ -1,9 +1,8 @@
 #!/usr/bin/python
-import sys
-import json
 
 from coinstac_dinunet import COINNRemote
 from coinstac_dinunet.metrics import Prf1a
+from coinstac_dinunet.io import RECV
 #
 # import pydevd_pycharm
 #
@@ -22,7 +21,6 @@ class FSRemote(COINNRemote):
 
 
 if __name__ == "__main__":
-    args = json.loads(sys.stdin.read())
-    remote = FSRemote(cache=args['cache'], input=args['input'], state=args['state'])
+    remote = FSRemote(cache=RECV['cache'], input=RECV['input'], state=RECV['state'])
     remote.compute()
     remote.send()
