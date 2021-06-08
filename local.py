@@ -78,7 +78,7 @@ class FreeSurferTrainer(COINNTrainer):
 
 if __name__ == "__main__":
     pretrain_args = {'epochs': 51, 'batch_size': 16}
-    local = COINNLocal(cache=RECV['cache'], input=RECV['input'], pretrain_args=None, batch_size=16,
+    local = COINNLocal(cache=RECV['cache'], input=RECV['input'], pretrain_args=pretrain_args, batch_size=16,
                        state=RECV['state'], epochs=111, patience=21, computation_id='fsv_quick')
     local.compute(FreeSurferDataset, FreeSurferTrainer)
     local.send()
