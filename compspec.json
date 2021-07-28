@@ -1,18 +1,18 @@
 {
   "meta": {
-    "name": "Freesurfer volumes classification",
+    "name": "FSV",
     "id": "fsv",
     "version": "v1.0.0",
-    "repository": "",
-    "description": "..."
+    "repository": "https:\/\/github.com\/MRN-Code\/coinstac_ssr_fsl",
+    "description": "Single shot regresssion on FreeSurfer Data",
+    "compspecVersion": 2
   },
   "computation": {
     "type": "docker",
     "dockerImage": "fsv",
     "command": [
-      "python", "\/computation\/local.py",
-      "--profile", "True",
-      "--profiler_gather_freq", "10"
+      "python",
+      "\/computation\/local.py"
     ],
     "remote": {
       "type": "docker",
