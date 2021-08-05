@@ -3,7 +3,7 @@ from coinstac_dinunet import COINNRemote
 from coinstac_dinunet.io import COINPyService
 from coinstac_dinunet.metrics import Prf1a
 
-from local import FreeSurferDataset, FreeSurferTrainer
+from classification import FreeSurferDataset, FreeSurferTrainer
 
 
 #
