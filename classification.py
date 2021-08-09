@@ -3,10 +3,9 @@
 import os
 import pandas as pd
 import torch
-from coinstac_dinunet import COINNDataset, COINNTrainer, COINNLocal
+from coinstac_dinunet import COINNDataset, COINNTrainer
 from coinstac_dinunet.metrics import Prf1a
 import torch.nn.functional as F
-from coinstac_dinunet.io import RECV
 
 from model import MSANNet
 
@@ -74,11 +73,3 @@ class FreeSurferTrainer(COINNTrainer):
 
     def new_metrics(self):
         return Prf1a()
-
-
-if __name__ == "__main__":
-    pretrain_args = {'epochs': 51, 'batch_size': 16}
-    local = COINNLocal(cache=RECV['cache'], input=RECV['input'], pretrain_args=pretrain_args, batch_size=16,
-                       state=RECV['state'], epochs=111, patience=21, computation_id='fsv_quick')
-    local.compute(FreeSurferDataset, FreeSurferTrainer)
-    local.send()

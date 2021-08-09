@@ -17,3 +17,4 @@ COPY . /computation
 # For dev only
 RUN pip install "/computation/dist/$(ls -t1 dist|  head -n 1)"
 
+CMD ["python", "entry.py"]
