@@ -1,15 +1,7 @@
-from coinstac_dinunet import COINNLocal
-from coinstac_dinunet import COINNRemote
+from coinstac_dinunet import COINNLocal, COINNRemote
 from coinstac_dinunet.io import COINPyService
 from coinstac_dinunet.metrics import Prf1a
-
 from classification import FreeSurferDataset, FreeSurferTrainer
-
-
-#
-# import pydevd_pycharm
-#
-# pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
 
 
 class FSRemote(COINNRemote):
