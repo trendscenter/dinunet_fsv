@@ -15,7 +15,6 @@ from model import MSANNet
 #
 # pydevd_pycharm.settrace('172.17.0.1', port=8881, stdoutToServer=True, stderrToServer=True, suspend=False)
 
-
 class FreeSurferDataset(COINNDataset):
     def __init__(self, **kw):
         super().__init__(**kw)
