@@ -1,4 +1,4 @@
-freesurferfile,label,age
+freesurferfile,isControl,age
 subject0_aseg_stats.txt,True,36.0
 subject1_aseg_stats.txt,False,65.0
 subject2_aseg_stats.txt,True,45.0
