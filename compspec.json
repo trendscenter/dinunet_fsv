@@ -1,26 +1,200 @@
 {
   "meta": {
-    "name": "FSV",
-    "id": "fsv",
+    "name": "FSL control classification with NN in COINSTAC",
+    "id": "coinnstac-dinunet-fsl",
     "version": "v1.0.0",
-    "repository": "https:\/\/github.com\/MRN-Code\/coinstac_ssr_fsl",
-    "description": "Single shot regresssion on FreeSurfer Data",
+    "repository": "https:\/\/github.com\/trendscenter\/dinunet_fsv.git",
+    "description": "FSL control classification with NN",
     "compspecVersion": 2
   },
   "computation": {
     "type": "docker",
-    "dockerImage": "fsv",
-    "command": [
-      "python",
-      "\/computation\/local.py"
-    ],
+    "dockerImage": "nn-fsl",
     "remote": {
       "type": "docker",
-      "dockerImage": "fsv",
-      "command": [
-        "python",
-        "\/computation\/remote.py"
-      ]
-    }
+      "dockerImage": "nn-fsl"
+    },
+    "input": {
+      "mode": {
+        "default": "train",
+        "values": [
+          "train",
+          "test"
+        ],
+        "label": "NN Mode",
+        "type": "select",
+        "source": "owner",
+        "group": "NN Params",
+        "order": 1
+      },
+      "num_folds": {
+        "default": null,
+        "label": "K-Fold Cross Validation, K? (mutually exclusive with Data split ratio)",
+        "type": "number",
+        "source": "owner",
+        "group": "Pick One",
+        "order": 2
+      },
+      "split_ratio": {
+        "default": [0.7, 0.15, 0.15],
+        "label": "Data split ratio for train, validation, and test. Eg. [0.6, 0.2, 0.2], or [0.8, 0.2]",
+        "type": "object",
+        "source": "owner",
+        "group": "Pick One",
+        "order": 3
+      },
+      "batch_size": {
+        "default": 16,
+        "label": "Batch size",
+        "type": "number",
+        "source": "owner",
+        "group": "NN Params",
+        "order": 4
+      },
+      "learning_rate": {
+        "default": 0.001,
+        "label": "Learning rate",
+        "type": "number",
+        "source": "owner",
+        "group": "NN Params",
+        "order": 5
+      },
+      "epochs": {
+        "default": 101,
+        "label": "Epochs",
+        "type": "number",
+        "source": "owner",
+        "group": "NN Params",
+        "order": 6
+      },
+      "local_iterations": {
+        "default": 1,
+        "label": "No. of gradient accumulate iterations",
+        "type": "number",
+        "source": "owner",
+        "group": "NN Params",
+        "order": 7
+      },
+      "validation_epochs": {
+        "default": 1,
+        "label": "No. of epochs for validation",
+        "type": "number",
+        "source": "owner",
+        "group": "NN Params",
+        "order": 8
+      },
+      "gpus": {
+        "default": [],
+        "label": "GPUs id to use. Eg. [0, 1]",
+        "type": "object",
+        "source": "member",
+        "group": "NN Params",
+        "order": 9
+      },
+      "pin_memory": {
+        "default": false,
+        "label": "Pin Memory",
+        "type": "boolean",
+        "source": "member",
+        "group": "NN Params",
+        "order": 10
+      },
+      "num_workers": {
+        "default": 0,
+        "label": "Number of workers",
+        "type": "number",
+        "source": "member",
+        "group": "NN Params",
+        "order": 11
+      },
+      "patience": {
+        "default": 101,
+        "label": "Early stop patience",
+        "type": "number",
+        "source": "owner",
+        "group": "NN Params",
+        "order": 12
+      },
+      "pretrain_args": {
+        "default": {
+          "epochs": 51,
+          "learning_rate": 0.001,
+          "batch_size": 16,
+          "gpus": [],
+          "local_iterations": 1,
+          "validation_epochs": 1,
+          "pin_memory": false,
+          "num_workers": 0,
+          "patience": 51
+        },
+        "label": "Pretrain Local",
+        "type": "object",
+        "source": "owner",
+        "group": "NN Params",
+        "order": 13
+      },
+      "input_size": {
+        "default": 66,
+        "label": "Num of dependent variables",
+        "type": "number",
+        "source": "owner",
+        "group": "Computation params",
+        "order": 1
+      },
+      "hidden_sizes": {
+        "default": [
+          256,
+          128,
+          64,
+          32
+        ],
+        "label": "Size of each inner NN layers (except input and the last layer)",
+        "type": "object",
+        "source": "owner",
+        "group": "Computation params",
+        "order": 2
+      },
+      "num_class": {
+        "default": 2,
+        "label": "Number of classes",
+        "type": "number",
+        "source": "owner",
+        "group": "Computation params",
+        "order": 3
+      },
+      "labels_column": {
+        "default": "isControl",
+        "label": "Column name to be used as label",
+        "type": "string",
+        "source": "member",
+        "group": "Computation params",
+        "order": 4
+      },
+      "covariates": {
+        "label": "Covariates",
+        "type": "array",
+        "items": [
+          "boolean",
+          "number"
+        ]
+      },
+      "data": {
+        "label": "Data",
+        "type": "array",
+        "items": [
+          "FreeSurfer"
+        ],
+        "extensions": [
+          [
+            "csv",
+            "txt"
+          ]
+        ]
+      }
+    },
+    "output": {
+    },
+    "display": [
+    ]
   }
 }
