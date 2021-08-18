@@ -3,10 +3,10 @@
 import os
 import pandas as pd
 import torch
-from coinstac_dinunet import COINNDataset, COINNTrainer
+from coinstac_dinunet import COINNDataset, COINNTrainer, COINNDataHandle
 from coinstac_dinunet.metrics import Prf1a
 import torch.nn.functional as F
-
+from coinstac_dinunet.data.datautils import init_k_folds
 from model import MSANNet
 
 
@@ -22,10 +22,12 @@ class FreeSurferDataset(COINNDataset):
 
     def load_index(self, site, file):
         if self.labels.get(site) is None:
-            label_dir = self.path(site, 'label_dir')
-            labels_file = os.listdir(label_dir)[0]
-            self.labels[site] = pd.read_csv(label_dir + os.sep + labels_file).set_index('freesurferfile')
-        y = self.labels[site].loc[file]['label']
+            self.labels[site] = pd.DataFrame(self.inputspecs[site]['covariates']).T
+        y = self.labels[site].loc[file][self.inputspecs[site]['labels_column']]
+
+        if isinstance(y, str):
+            y = int(y.strip().lower() == 'true')
+
         """
         int64 could not be json serializable.
         """
@@ -33,7 +35,7 @@ class FreeSurferDataset(COINNDataset):
 
     def __getitem__(self, ix):
         site, file, y = self.indices[ix]
-        data_dir = self.path(site, 'data_dir')
+        data_dir = self.path(site)
         df = pd.read_csv(data_dir + os.sep + file, sep='\t', names=['File', file], skiprows=1)
         df = df.set_index(df.columns[0])
         df = df / df.max().astype('float64')
@@ -73,3 +75,9 @@ class FreeSurferTrainer(COINNTrainer):
 
     def new_metrics(self):
         return Prf1a()
+
+
+class FSVDataHandle(COINNDataHandle):
+    def prepare_data(self):
+        files = list(pd.DataFrame(self.cache['covariates']).T.index)
+        return init_k_folds(files, self.cache, self.state)

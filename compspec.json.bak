@@ -1,0 +1,18 @@
+{
+  "meta": {
+    "name": "FSV",
+    "id": "fsv",
+    "version": "v1.0.0",
+    "repository": "https:\/\/github.com\/MRN-Code\/coinstac_ssr_fsl",
+    "description": "Single shot regresssion on FreeSurfer Data",
+    "compspecVersion": 2
+  },
+  "computation": {
+    "type": "docker",
+    "dockerImage": "fsv",
+    "remote": {
+      "type": "docker",
+      "dockerImage": "fsv"
+    }
+  }
+}

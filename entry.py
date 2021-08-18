@@ -1,7 +1,7 @@
 from coinstac_dinunet import COINNLocal, COINNRemote
 from coinstac_dinunet.io import COINPyService
 from coinstac_dinunet.metrics import Prf1a
-from classification import FreeSurferDataset, FreeSurferTrainer
+from classification import FreeSurferDataset, FreeSurferTrainer, FSVDataHandle
 
 
 class FSRemote(COINNRemote):
@@ -18,10 +18,11 @@ class FSRemote(COINNRemote):
 class Server(COINPyService):
 
     def get_local(self, msg) -> callable:
-        pretrain_args = {'epochs': 51, 'batch_size': 16}
+        pretrain_args = {'epochs': 11, 'batch_size': 16}
         local = COINNLocal(cache=self.cache, input=msg['data']['input'],
-                           pretrain_args=None, batch_size=16,
-                           state=msg['data']['state'], epochs=21, patience=21, computation_id='fsv_quick')
+                           pretrain_args=pretrain_args, batch_size=16,
+                           state=msg['data']['state'], epochs=5, patience=21,
+                           computation_id='coinstac_dinunet_fsl')
         return local
 
     def get_remote(self, msg) -> callable:
@@ -30,7 +31,7 @@ class Server(COINPyService):
         return remote
 
     def get_local_compute_args(self, msg) -> list:
-        return [FreeSurferTrainer, FreeSurferDataset]
+        return [FreeSurferTrainer, FreeSurferDataset, FSVDataHandle]
 
 
 server = Server(verbose=False)
