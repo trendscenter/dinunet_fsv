@@ -90,7 +90,7 @@
         "type": "number",
         "source": "member",
         "group": "NN Params",
-        "order": 9
+        "order": 7
       },
       "learning_rate": {
         "default": 0.001,
@@ -98,7 +98,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 7
+        "order": 8
       },
       "epochs": {
         "default": 101,
@@ -106,7 +106,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 8
+        "order": 9
       },
       "validation_epochs": {
         "default": 1,
