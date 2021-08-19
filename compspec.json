@@ -80,9 +80,17 @@
         "default": 16,
         "label": "Batch size",
         "type": "number",
-        "source": "owner",
+        "source": "member",
         "group": "NN Params",
         "order": 6
+      },
+      "local_iterations": {
+        "default": 1,
+        "label": "No. of gradient accumulate iterations(Effective batch size = batch_size * grad_accumulation_iters)",
+        "type": "number",
+        "source": "member",
+        "group": "NN Params",
+        "order": 9
       },
       "learning_rate": {
         "default": 0.001,
@@ -99,14 +107,6 @@
         "source": "owner",
         "group": "NN Params",
         "order": 8
-      },
-      "local_iterations": {
-        "default": 1,
-        "label": "No. of gradient accumulate iterations",
-        "type": "number",
-        "source": "owner",
-        "group": "NN Params",
-        "order": 9
       },
       "validation_epochs": {
         "default": 1,
@@ -148,6 +148,14 @@
         "group": "NN Params",
         "order": 14
       },
+      "load_lim": {
+        "default": null,
+        "label": "Limit the data to be loaded.",
+        "type": "number",
+        "source": "owner",
+        "group": "NN Params",
+        "order": 15
+      },
       "pretrain_args": {
         "default": {
           "epochs": 51,
@@ -164,7 +172,7 @@
         "type": "object",
         "source": "member",
         "group": "NN Params",
-        "order": 15
+        "order": 16
       },
       "dataloader_args": {
         "default": {
@@ -176,7 +184,7 @@
         "type": "object",
         "source": "member",
         "group": "NN Params",
-        "order": 16
+        "order": 17
       },
       "input_size": {
         "default": 66,
@@ -184,7 +192,7 @@
         "type": "number",
         "source": "owner",
         "group": "Computation params",
-        "order": 7
+        "order": 18
       },
       "hidden_sizes": {
         "default": [
@@ -197,7 +205,7 @@
         "type": "object",
         "source": "owner",
         "group": "Computation params",
-        "order": 18
+        "order": 19
       },
       "num_class": {
         "default": 2,
@@ -205,7 +213,7 @@
         "type": "number",
         "source": "owner",
         "group": "Computation params",
-        "order": 19
+        "order": 20
       },
       "labels_column": {
         "default": "isControl",
@@ -213,7 +221,7 @@
         "type": "string",
         "source": "member",
         "group": "Computation params",
-        "order": 20
+        "order": 21
       }
     },
     "output": {
