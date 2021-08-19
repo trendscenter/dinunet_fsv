@@ -10,11 +10,40 @@
   "computation": {
     "type": "docker",
     "dockerImage": "nn-fsl",
+    "command": [
+      "python"
+    ],
     "remote": {
       "type": "docker",
-      "dockerImage": "nn-fsl"
+      "dockerImage": "nn-fsl",
+      "command": [
+        "python"
+      ]
     },
     "input": {
+      "covariates": {
+        "order": 1,
+        "label": "Covariates",
+        "type": "array",
+        "items": [
+          "boolean",
+          "number"
+        ]
+      },
+      "data": {
+        "order": 2,
+        "label": "Data",
+        "type": "array",
+        "items": [
+          "FreeSurfer"
+        ],
+        "extensions": [
+          [
+            "csv",
+            "txt"
+          ]
+        ]
+      },
       "mode": {
         "default": "train",
         "values": [
@@ -25,7 +54,7 @@
         "type": "select",
         "source": "owner",
         "group": "NN Params",
-        "order": 1
+        "order": 3
       },
       "num_folds": {
         "default": null,
@@ -33,15 +62,19 @@
         "type": "number",
         "source": "owner",
         "group": "Pick One",
-        "order": 2
+        "order": 4
       },
       "split_ratio": {
-        "default": [0.7, 0.15, 0.15],
+        "default": [
+          0.7,
+          0.15,
+          0.15
+        ],
         "label": "Data split ratio for train, validation, and test. Eg. [0.6, 0.2, 0.2], or [0.8, 0.2]",
         "type": "object",
         "source": "owner",
         "group": "Pick One",
-        "order": 3
+        "order": 5
       },
       "batch_size": {
         "default": 16,
@@ -49,7 +82,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 4
+        "order": 6
       },
       "learning_rate": {
         "default": 0.001,
@@ -57,7 +90,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 5
+        "order": 7
       },
       "epochs": {
         "default": 101,
@@ -65,7 +98,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 6
+        "order": 8
       },
       "local_iterations": {
         "default": 1,
@@ -73,7 +106,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 7
+        "order": 9
       },
       "validation_epochs": {
         "default": 1,
@@ -81,7 +114,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 8
+        "order": 10
       },
       "gpus": {
         "default": [],
@@ -89,7 +122,7 @@
         "type": "object",
         "source": "member",
         "group": "NN Params",
-        "order": 9
+        "order": 11
       },
       "pin_memory": {
         "default": false,
@@ -97,7 +130,7 @@
         "type": "boolean",
         "source": "member",
         "group": "NN Params",
-        "order": 10
+        "order": 12
       },
       "num_workers": {
         "default": 0,
@@ -105,7 +138,7 @@
         "type": "number",
         "source": "member",
         "group": "NN Params",
-        "order": 11
+        "order": 13
       },
       "patience": {
         "default": 101,
@@ -113,7 +146,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 12
+        "order": 14
       },
       "pretrain_args": {
         "default": {
@@ -127,11 +160,23 @@
           "num_workers": 0,
           "patience": 51
         },
-        "label": "Pretrain Local",
+        "label": "Pretrain arguments (Will override previous)",
         "type": "object",
-        "source": "owner",
+        "source": "member",
         "group": "NN Params",
-        "order": 13
+        "order": 15
+      },
+      "dataloader_args": {
+        "default": {
+          "train": {},
+          "validation": {},
+          "test": {}
+        },
+        "label": "Dataloader arguments (Will override previous).",
+        "type": "object",
+        "source": "member",
+        "group": "NN Params",
+        "order": 16
       },
       "input_size": {
         "default": 66,
@@ -139,7 +184,7 @@
         "type": "number",
         "source": "owner",
         "group": "Computation params",
-        "order": 1
+        "order": 7
       },
       "hidden_sizes": {
         "default": [
@@ -152,7 +197,7 @@
         "type": "object",
         "source": "owner",
         "group": "Computation params",
-        "order": 2
+        "order": 18
       },
       "num_class": {
         "default": 2,
@@ -160,7 +205,7 @@
         "type": "number",
         "source": "owner",
         "group": "Computation params",
-        "order": 3
+        "order": 19
       },
       "labels_column": {
         "default": "isControl",
@@ -168,28 +213,7 @@
         "type": "string",
         "source": "member",
         "group": "Computation params",
-        "order": 4
-      },
-      "covariates": {
-        "label": "Covariates",
-        "type": "array",
-        "items": [
-          "boolean",
-          "number"
-        ]
-      },
-      "data": {
-        "label": "Data",
-        "type": "array",
-        "items": [
-          "FreeSurfer"
-        ],
-        "extensions": [
-          [
-            "csv",
-            "txt"
-          ]
-        ]
+        "order": 20
       }
     },
     "output": {
