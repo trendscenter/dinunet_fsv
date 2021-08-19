@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "name": "Freesurfer volumes classification",
+    "id": "fsv",
+    "version": "v1.0.0",
+    "repository": "https:\/\/github.com\/trendscenter\/dinunet_fsv.git",
+    "description": "..."
+  },
+  "computation": {
+    "type": "docker",
+    "dockerImage": "fsv",
+    "command": [
+      "python", "\/computation\/local.py",
+      "--profile", "False",
+      "--profiler_gather_freq", "10"
+    ],
+    "remote": {
+      "type": "docker",
+      "dockerImage": "fsv",
+      "command": [
+        "python",
+        "\/computation\/remote.py"
+      ]
+    }
+  }
+}
