@@ -56,33 +56,13 @@
         "group": "NN Params",
         "order": 3
       },
-      "num_folds": {
-        "default": null,
-        "label": "K-Fold Cross Validation, K? (mutually exclusive with Data split ratio)",
-        "type": "number",
-        "source": "owner",
-        "group": "Pick One",
-        "order": 4
-      },
-      "split_ratio": {
-        "default": [
-          0.7,
-          0.15,
-          0.15
-        ],
-        "label": "Data split ratio for train, validation, and test. Eg. [0.6, 0.2, 0.2], or [0.8, 0.2]",
-        "type": "object",
-        "source": "owner",
-        "group": "Pick One",
-        "order": 5
-      },
       "batch_size": {
         "default": 16,
         "label": "Batch size",
         "type": "number",
         "source": "member",
         "group": "NN Params",
-        "order": 6
+        "order": 4
       },
       "local_iterations": {
         "default": 1,
@@ -90,7 +70,7 @@
         "type": "number",
         "source": "member",
         "group": "NN Params",
-        "order": 7
+        "order": 5
       },
       "learning_rate": {
         "default": 0.001,
@@ -98,7 +78,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 8
+        "order": 6
       },
       "epochs": {
         "default": 101,
@@ -106,23 +86,23 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 9
+        "order": 7
       },
       "validation_epochs": {
         "default": 1,
-        "label": "No. of epochs for validation",
+        "label": "No. of epochs for validation step",
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 10
+        "order": 8
       },
       "gpus": {
         "default": [],
-        "label": "GPUs id to use. Eg. [0, 1]",
+        "label": "GPU IDs to use. Eg. [0], [0, 1]",
         "type": "object",
         "source": "member",
         "group": "NN Params",
-        "order": 11
+        "order": 9
       },
       "pin_memory": {
         "default": false,
@@ -130,7 +110,7 @@
         "type": "boolean",
         "source": "member",
         "group": "NN Params",
-        "order": 12
+        "order": 10
       },
       "num_workers": {
         "default": 0,
@@ -138,23 +118,23 @@
         "type": "number",
         "source": "member",
         "group": "NN Params",
-        "order": 13
+        "order": 11
       },
       "patience": {
         "default": 101,
-        "label": "Early stop patience",
+        "label": "Early stop patience epochs",
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 14
+        "order": 12
       },
       "load_lim": {
         "default": null,
-        "label": "Limit the data to be loaded.",
+        "label": "Limit the data to be loaded (Useful for debugging the pipeline with few data)",
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 15
+        "order": 13
       },
       "pretrain_args": {
         "default": {
@@ -168,11 +148,11 @@
           "num_workers": 0,
           "patience": 51
         },
-        "label": "Pretrain arguments (Will override previous)",
+        "label": "Pretrain arguments (Will override the main arguments above)",
         "type": "object",
         "source": "member",
         "group": "NN Params",
-        "order": 16
+        "order": 14
       },
       "dataloader_args": {
         "default": {
@@ -180,10 +160,30 @@
           "validation": {},
           "test": {}
         },
-        "label": "Dataloader arguments (Will override previous).",
+        "label": "Dataloader arguments (Will override the main arguments above)",
         "type": "object",
         "source": "member",
         "group": "NN Params",
+        "order": 15
+      },
+      "num_folds": {
+        "default": null,
+        "label": "K-Fold Cross Validation, K? (Mutually exclusive with data split ratio)",
+        "type": "number",
+        "source": "owner",
+        "group": "Pick one",
+        "order": 16
+      },
+      "split_ratio": {
+        "default": [
+          0.7,
+          0.15,
+          0.15
+        ],
+        "label": "Data split ratio for train, validation, and/or test. Eg. [0.6, 0.2, 0.2], [0.8, 0.2], or [1](Default keys- train, validation, and test will be used from left to right)",
+        "type": "object",
+        "source": "owner",
+        "group": "Pick one",
         "order": 17
       },
       "input_size": {
