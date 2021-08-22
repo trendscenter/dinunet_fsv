@@ -206,9 +206,9 @@
       },
       "dataloader_args": {
         "default": {
-          "train": {},
-          "validation": {},
-          "test": {}
+          "train": {"drop_last": true},
+          "validation": {"drop_last": false},
+          "test": {"drop_last": false}
         },
         "label": "Dataloader arguments (Will override the main arguments above)",
         "type": "object",

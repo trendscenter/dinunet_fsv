@@ -1,7 +1,7 @@
 from coinstac_dinunet import COINNLocal, COINNRemote
 from coinstac_dinunet.io import COINPyService
-from nn_implementations.fcn import FreeSurferDataset, FreeSurferTrainer, FSVDataHandle
-from nn_implementations.cnn3d import VBMDataset, VBMTrainer, VBMDataHandle
+from nn_implementations.fsl import FreeSurferDataset, FreeSurferTrainer, FSVDataHandle
+from nn_implementations.vbm import VBMDataset, VBMTrainer, VBMDataHandle
 
 TASK_FSL = "FSL-Classification"
 TASK_VBM = "VBM-Classification"
@@ -10,10 +10,12 @@ TASK_VBM = "VBM-Classification"
 class Server(COINPyService):
     def get_local(self, msg) -> callable:
         pretrain_args = {'epochs': 11, 'batch_size': 16}
-        local = COINNLocal(task_id=TASK_FSL,
-                           cache=self.cache, input=msg['data']['input'],
-                           pretrain_args=pretrain_args, batch_size=16,
-                           state=msg['data']['state'], epochs=11, patience=21)
+        dataloader_args = {"train": {"drop_last": True}}
+        local = COINNLocal(task_id=TASK_VBM,
+                           cache=self.cache, input=msg['data']['input'], batch_size=2,
+                           state=msg['data']['state'], epochs=11, patience=21, model_scale=1,
+                           pretrain_args=None,
+                           dataloader_args=dataloader_args)
 
         if local.cache['task_id'] == TASK_FSL:
             return local, FreeSurferTrainer, FreeSurferDataset, FSVDataHandle

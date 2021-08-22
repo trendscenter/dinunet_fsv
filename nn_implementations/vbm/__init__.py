@@ -21,15 +21,20 @@ class VBMDataset(COINNDataset):
 
     def load_index(self, site, file):
         if self.labels.get(site) is None:
-            label_dir = self.path(site, 'label_dir')
-            labels_file = os.listdir(label_dir)[0]
-            self.labels[site] = pd.read_csv(label_dir + os.sep + labels_file).set_index('niftifile')
-        y = self.labels[site].loc[file]['isControl']
-        self.indices.append([site, file, int(1 - y)])
+            self.labels[site] = pd.DataFrame(self.inputspecs[site]['covariates']).T
+        y = self.labels[site].loc[file][self.inputspecs[site]['labels_column']]
+
+        if isinstance(y, str):
+            y = int(y.strip().lower() == 'true')
+
+        """
+        int64 could not be json serializable.
+        """
+        self.indices.append([site, file, int(y)])
 
     def __getitem__(self, ix):
         site, file, y = self.indices[ix]
-        data_dir = self.path(site, 'data_dir')
+        data_dir = self.path(site)
         nif = np.array(ni.load(data_dir + os.sep + file).dataobj)
         nif[nif < 0.05] = 0
 

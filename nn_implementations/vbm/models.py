@@ -8,7 +8,7 @@ class DownBlock(nn.Module):
         self.layers = nn.ModuleList()
         layers = [
             nn.Conv3d(in_channels, out_channels, kernel_size=k, padding=p),
-            nn.BatchNorm3d(out_channels, track_running_stats=False),
+            nn.BatchNorm3d(out_channels),
             nn.ReLU(inplace=True),
             nn.MaxPool3d(kernel_size=2, stride=2),
         ]
@@ -31,15 +31,15 @@ class VBMNet(nn.Module):
 
         self.classifier = nn.Sequential(
             nn.Linear(int(32 * b_mul) * 3 * 4 * 3, 512),
-            nn.BatchNorm1d(512, track_running_stats=False),
+            nn.BatchNorm1d(512),
             nn.ReLU(inplace=True),
 
             nn.Linear(512, 256),
-            nn.BatchNorm1d(256, track_running_stats=False),
+            nn.BatchNorm1d(256),
             nn.ReLU(inplace=True),
 
             nn.Linear(256, 128),
-            nn.BatchNorm1d(128, track_running_stats=False),
+            nn.BatchNorm1d(128),
             nn.ReLU(inplace=True),
 
             nn.Linear(128, num_classes),
@@ -51,11 +51,11 @@ class VBMNet(nn.Module):
         x = self.classifier(x)
         return x
 
-
+#
 # m = VBMNet(1, 2, b_mul=2)
-# m.train()
-# params_count = sum(p.numel() for p in m.parameters() if p.requires_grad)
-# print('Params:', params_count)
-# i = torch.randn((2, 1, 121, 145, 121))
+# print(m.classifier.training)
+# m.eval()
+# print(m.classifier.training)
+# i = torch.randn((1, 1, 121, 145, 121))
 # o = m(i)
 # print("Out shape:", o.shape)

@@ -12,11 +12,11 @@ class MSANNet(nn.Module):
         current_dim = self.in_size
         for i, h_dim in enumerate(hidden_sizes):
             if i in dropout_in:
-                layers = [nn.Linear(current_dim, h_dim, bias=False), nn.BatchNorm1d(h_dim, track_running_stats=False),
+                layers = [nn.Linear(current_dim, h_dim, bias=False), nn.BatchNorm1d(h_dim),
                           nn.ReLU(),
                           nn.Dropout(p=0.5)]
             else:
-                layers = [nn.Linear(current_dim, h_dim, bias=False), nn.BatchNorm1d(h_dim, track_running_stats=False),
+                layers = [nn.Linear(current_dim, h_dim, bias=False), nn.BatchNorm1d(h_dim),
                           nn.ReLU()]
 
             self.layers.append(nn.Sequential(*layers))
