@@ -6,8 +6,8 @@ import pandas as pd
 import torch
 import torch.nn.functional as F
 import torchio as tio
-from coinstac_dinunet import COINNDataset, COINNTrainer, COINNRemote, COINNDataHandle
-from coinstac_dinunet.metrics import Prf1a, ConfusionMatrix, COINNAverages
+from coinstac_dinunet import COINNDataset, COINNTrainer, COINNDataHandle
+from coinstac_dinunet.metrics import Prf1a
 from coinstac_dinunet.data.datautils import init_k_folds
 
 from .models import VBMNet
