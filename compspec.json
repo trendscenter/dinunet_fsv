@@ -1,21 +1,36 @@
 {
   "meta": {
-    "name": "FSL control classification with NN in COINSTAC",
-    "id": "coinnstac-dinunet-fsl",
+    "name": "Decentralized Neural Networks in COINSTAC",
+    "id": "coinstac-dinunet",
     "version": "v1.0.0",
     "repository": "https:\/\/github.com\/trendscenter\/dinunet_fsv.git",
-    "description": "FSL control classification with NN",
+    "description": "A wide range of end-to-end NN implementations in COINSTAC",
     "compspecVersion": 2
   },
   "computation": {
     "type": "docker",
-    "dockerImage": "nn-fsl",
+    "dockerImage": "coinn",
     "command": [
       "python"
     ],
+    "dockerOptions": {
+      "HostConfig": {
+        "DeviceRequests": [
+          {
+            "Drivers": "nvidia",
+            "Capabilities": [
+              [
+                "gpu"
+              ]
+            ]
+          }
+        ],
+        "ShmSize": 2147483648
+      }
+    },
     "remote": {
       "type": "docker",
-      "dockerImage": "nn-fsl",
+      "dockerImage": "coinn",
       "command": [
         "python"
       ]
@@ -44,6 +59,18 @@
           ]
         ]
       },
+      "task_id": {
+        "default": "FSL-Classification",
+        "values": [
+          "FSL-Classification",
+          "VBM-Classification"
+        ],
+        "label": "Which task to run?",
+        "type": "select",
+        "source": "owner",
+        "group": "NN Params",
+        "order": 3
+      },
       "mode": {
         "default": "train",
         "values": [
@@ -54,7 +81,22 @@
         "type": "select",
         "source": "owner",
         "group": "NN Params",
-        "order": 3
+        "order": 4
+      },
+      "agg_engine": {
+        "default": "dSGD",
+        "values": [
+          "dSGD"
+        ],
+        "label": "Aggregation engine to use",
+        "type": "select",
+        "source": "owner",
+        "conditional": {
+          "variable": "mode",
+          "value": "train"
+        },
+        "group": "NN Params",
+        "order": 5
       },
       "batch_size": {
         "default": 16,
@@ -62,7 +104,7 @@
         "type": "number",
         "source": "member",
         "group": "NN Params",
-        "order": 4
+        "order": 6
       },
       "local_iterations": {
         "default": 1,
@@ -70,7 +112,7 @@
         "type": "number",
         "source": "member",
         "group": "NN Params",
-        "order": 5
+        "order": 7
       },
       "learning_rate": {
         "default": 0.001,
@@ -78,7 +120,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 6
+        "order": 8
       },
       "epochs": {
         "default": 101,
@@ -86,7 +128,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 7
+        "order": 9
       },
       "validation_epochs": {
         "default": 1,
@@ -94,7 +136,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 8
+        "order": 10
       },
       "gpus": {
         "default": [],
@@ -102,7 +144,7 @@
         "type": "object",
         "source": "member",
         "group": "NN Params",
-        "order": 9
+        "order": 11
       },
       "pin_memory": {
         "default": false,
@@ -110,7 +152,7 @@
         "type": "boolean",
         "source": "member",
         "group": "NN Params",
-        "order": 10
+        "order": 12
       },
       "num_workers": {
         "default": 0,
@@ -118,7 +160,7 @@
         "type": "number",
         "source": "member",
         "group": "NN Params",
-        "order": 11
+        "order": 13
       },
       "patience": {
         "default": 101,
@@ -126,7 +168,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 12
+        "order": 14
       },
       "load_lim": {
         "default": null,
@@ -134,7 +176,15 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 13
+        "order": 15
+      },
+      "load_sparse": {
+        "default": false,
+        "label": "Load each data item in single dataloader(Useful when working with patches of images like in semantic segmentation.)",
+        "type": "number",
+        "source": "owner",
+        "group": "NN Params",
+        "order": 16
       },
       "pretrain_args": {
         "default": {
@@ -152,7 +202,7 @@
         "type": "object",
         "source": "member",
         "group": "NN Params",
-        "order": 14
+        "order": 17
       },
       "dataloader_args": {
         "default": {
@@ -164,15 +214,7 @@
         "type": "object",
         "source": "member",
         "group": "NN Params",
-        "order": 15
-      },
-      "num_folds": {
-        "default": null,
-        "label": "K-Fold Cross Validation, K? (Mutually exclusive with data split ratio)",
-        "type": "number",
-        "source": "owner",
-        "group": "Pick one",
-        "order": 16
+        "order": 18
       },
       "split_ratio": {
         "default": [
@@ -184,15 +226,53 @@
         "type": "object",
         "source": "owner",
         "group": "Pick one",
-        "order": 17
+        "order": 19
+      },
+      "num_folds": {
+        "default": null,
+        "label": "K-Fold Cross Validation, K? (Mutually exclusive with data split ratio)",
+        "type": "number",
+        "source": "owner",
+        "group": "Pick one",
+        "order": 20
+      },
+      "monitor_metric": {
+        "default": "f1",
+        "label": "Metric to monitor for model selection.",
+        "type": "select",
+        "values": ["f1", "accuracy", "precision", "recall", "overlap", "average", "time"],
+        "source": "owner",
+        "group": "NN Params",
+        "order": 21
+      },
+      "metric_direction": {
+        "default": "maximize",
+        "label": "Metric direction of improvement.",
+        "type": "select",
+        "values": ["maximize", "minimize"],
+        "source": "owner",
+        "group": "NN Params",
+        "order": 22
+      },
+      "log_header": {
+        "default": "Loss|F1",
+        "label": "Plots to be generated. Separate plot will be created for items separated by pipe (|).",
+        "type": "string",
+        "source": "owner",
+        "group": "NN Params",
+        "order": 23
       },
       "input_size": {
         "default": 66,
         "label": "Num of dependent variables",
         "type": "number",
         "source": "owner",
+        "conditional": {
+          "variable": "task_id",
+          "value": "FSL-Classification"
+        },
         "group": "Computation params",
-        "order": 18
+        "order": 24
       },
       "hidden_sizes": {
         "default": [
@@ -204,8 +284,12 @@
         "label": "Size of each inner NN layers (except input and the last layer)",
         "type": "object",
         "source": "owner",
+        "conditional": {
+          "variable": "task_id",
+          "value": "FSL-Classification"
+        },
         "group": "Computation params",
-        "order": 19
+        "order": 25
       },
       "num_class": {
         "default": 2,
@@ -213,7 +297,19 @@
         "type": "number",
         "source": "owner",
         "group": "Computation params",
-        "order": 20
+        "order": 26
+      },
+      "input_channel": {
+        "default": 1,
+        "label": "No. of input channels",
+        "type": "number",
+        "source": "owner",
+        "conditional": {
+          "variable": "task_id",
+          "value": "VBM-Classification"
+        },
+        "group": "Computation params",
+        "order": 27
       },
       "labels_column": {
         "default": "isControl",
@@ -221,7 +317,7 @@
         "type": "string",
         "source": "member",
         "group": "Computation params",
-        "order": 21
+        "order": 28
       }
     },
     "output": {

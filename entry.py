@@ -1,37 +1,33 @@
 from coinstac_dinunet import COINNLocal, COINNRemote
 from coinstac_dinunet.io import COINPyService
-from coinstac_dinunet.metrics import Prf1a
-from classification import FreeSurferDataset, FreeSurferTrainer, FSVDataHandle
+from nn_implementations.fcn import FreeSurferDataset, FreeSurferTrainer, FSVDataHandle
+from nn_implementations.cnn3d import VBMDataset, VBMTrainer, VBMDataHandle
 
-
-class FSRemote(COINNRemote):
-    def _set_monitor_metric(self):
-        self.cache['monitor_metric'] = 'f1', 'maximize'
-
-    def _set_log_headers(self):
-        self.cache['log_header'] = 'Loss|Accuracy,F1'
-
-    def _new_metrics(self):
-        return Prf1a()
+TASK_FSL = "FSL-Classification"
+TASK_VBM = "VBM-Classification"
 
 
 class Server(COINPyService):
-
     def get_local(self, msg) -> callable:
         pretrain_args = {'epochs': 11, 'batch_size': 16}
-        local = COINNLocal(cache=self.cache, input=msg['data']['input'],
+        local = COINNLocal(task_id=TASK_FSL,
+                           cache=self.cache, input=msg['data']['input'],
                            pretrain_args=pretrain_args, batch_size=16,
-                           state=msg['data']['state'], epochs=5, patience=21,
-                           computation_id='coinstac_dinunet_fsl')
-        return local
+                           state=msg['data']['state'], epochs=11, patience=21)
+
+        if local.cache['task_id'] == TASK_FSL:
+            return local, FreeSurferTrainer, FreeSurferDataset, FSVDataHandle
+        elif local.cache['task_id'] == TASK_VBM:
+            return local, VBMTrainer, VBMDataset, VBMDataHandle
 
     def get_remote(self, msg) -> callable:
-        remote = FSRemote(cache=self.cache, input=msg['data']['input'],
-                          state=msg['data']['state'])
-        return remote
+        remote = COINNRemote(cache=self.cache, input=msg['data']['input'],
+                             state=msg['data']['state'])
 
-    def get_local_compute_args(self, msg) -> list:
-        return [FreeSurferTrainer, FreeSurferDataset, FSVDataHandle]
+        if remote.cache['task_id'] == TASK_FSL:
+            return remote, FreeSurferTrainer
+        elif remote.cache['task_id'] == TASK_VBM:
+            return remote, VBMTrainer
 
 
 server = Server(verbose=False)
