@@ -108,7 +108,7 @@
       },
       "local_iterations": {
         "default": 1,
-        "label": "No. of gradient accumulate iterations(Effective batch size = batch_size * grad_accumulation_iters)",
+        "label": "Number of gradient accumulate iterations(Effective batch size = batch_size * grad_accumulation_iters)",
         "type": "number",
         "source": "member",
         "group": "NN Params",
@@ -132,7 +132,7 @@
       },
       "validation_epochs": {
         "default": 1,
-        "label": "No. of epochs for validation step",
+        "label": "Number of epochs for validation step",
         "type": "number",
         "source": "owner",
         "group": "NN Params",
@@ -181,7 +181,7 @@
       "load_sparse": {
         "default": false,
         "label": "Load each data item in single dataloader(Useful when working with patches of images like in semantic segmentation.)",
-        "type": "number",
+        "type": "boolean",
         "source": "owner",
         "group": "NN Params",
         "order": 16
@@ -301,7 +301,7 @@
       },
       "input_channel": {
         "default": 1,
-        "label": "No. of input channels",
+        "label": "Number of input channels",
         "type": "number",
         "source": "owner",
         "conditional": {
