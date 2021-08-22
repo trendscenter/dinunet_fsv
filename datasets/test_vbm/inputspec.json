@@ -355,7 +355,7 @@
       "value": 2
     },
     "num_workers": {
-      "value": 2
+      "value": 0
     },
     "learning_rate": {
       "value": 0.001
@@ -1008,6 +1008,9 @@
         }
       }
     },
+    "labels_column": {
+      "value": "isControl"
+    },
     "num_folds": {
       "value": 10
     },
@@ -1026,7 +1029,7 @@
       "value": 2
     },
     "num_workers": {
-      "value": 2
+      "value": 0
     },
     "learning_rate": {
       "value": 0.001
@@ -1385,6 +1388,9 @@
         }
       }
     },
+    "labels_column": {
+      "value": "isControl"
+    },
     "num_folds": {
       "value": 10
     },
@@ -1403,7 +1409,7 @@
       "value": 2
     },
     "num_workers": {
-      "value": 2
+      "value": 0
     },
     "learning_rate": {
       "value": 0.001
@@ -1930,6 +1936,9 @@
         }
       }
     },
+    "labels_column": {
+      "value": "isControl"
+    },
     "num_folds": {
       "value": 10
     },
@@ -1948,7 +1957,7 @@
       "value": 2
     },
     "num_workers": {
-      "value": 2
+      "value": 0
     },
     "learning_rate": {
       "value": 0.001
