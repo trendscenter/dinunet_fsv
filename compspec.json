@@ -203,6 +203,10 @@
         "label": "Load each data item in single dataloader(Useful when working with patches of images like in semantic segmentation.)",
         "type": "boolean",
         "source": "owner",
+        "conditional": {
+          "variable": "task_id",
+          "value": "N/A"
+        },
         "group": "NN Params",
         "order": 16
       },
