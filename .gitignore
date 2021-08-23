@@ -11,7 +11,7 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
+#dist/
 downloads/
 eggs/
 .eggs/
@@ -120,8 +120,8 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
-test/output
-test/cache
-test/system
-test/transfer
-data
+datasets/*/output
+datasets/*/input
+datasets/*/cache
+datasets/*/transfer
+datasets/*/system

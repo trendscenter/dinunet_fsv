@@ -3,7 +3,7 @@ import coinstac_dinunet.io as io
 io.enable_io = False
 
 from coinstac_dinunet import PooledTrainer
-from classification import FreeSurferTrainer, FreeSurferDataset
+from nn_implementations.fsl import FreeSurferTrainer, FreeSurferDataset
 
 if __name__ == "__main__":
     trainer = PooledTrainer(FreeSurferTrainer,
