@@ -111,6 +111,10 @@
         "label": "Number of gradient accumulate iterations(Effective batch size = batch_size * grad_accumulation_iters)",
         "type": "number",
         "source": "member",
+        "conditional": {
+          "variable": "mode",
+          "value": "train"
+        },
         "group": "NN Params",
         "order": 7
       },
@@ -119,6 +123,10 @@
         "label": "Learning rate",
         "type": "number",
         "source": "owner",
+        "conditional": {
+          "variable": "mode",
+          "value": "train"
+        },
         "group": "NN Params",
         "order": 8
       },
@@ -135,6 +143,10 @@
         "label": "Number of epochs for validation step",
         "type": "number",
         "source": "owner",
+        "conditional": {
+          "variable": "mode",
+          "value": "train"
+        },
         "group": "NN Params",
         "order": 10
       },
@@ -167,6 +179,10 @@
         "label": "Early stop patience epochs",
         "type": "number",
         "source": "owner",
+        "conditional": {
+          "variable": "mode",
+          "value": "train"
+        },
         "group": "NN Params",
         "order": 14
       },
@@ -201,6 +217,10 @@
         "label": "Pretrain arguments (Will override the main arguments above)",
         "type": "object",
         "source": "member",
+        "conditional": {
+          "variable": "mode",
+          "value": "train"
+        },
         "group": "NN Params",
         "order": 17
       },
@@ -242,6 +262,10 @@
         "type": "select",
         "values": ["f1", "accuracy", "precision", "recall", "overlap", "average", "time"],
         "source": "owner",
+        "conditional": {
+          "variable": "mode",
+          "value": "train"
+        },
         "group": "NN Params",
         "order": 21
       },
@@ -251,6 +275,10 @@
         "type": "select",
         "values": ["maximize", "minimize"],
         "source": "owner",
+        "conditional": {
+          "variable": "mode",
+          "value": "train"
+        },
         "group": "NN Params",
         "order": 22
       },
