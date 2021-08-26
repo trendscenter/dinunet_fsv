@@ -60,9 +60,9 @@
         ]
       },
       "task_id": {
-        "default": "FSL-Classification",
+        "default": "FS-Classification",
         "values": [
-          "FSL-Classification",
+          "FS-Classification",
           "VBM-Classification"
         ],
         "label": "Which task to run?",
@@ -305,7 +305,7 @@
         "source": "owner",
         "conditional": {
           "variable": "task_id",
-          "value": "FSL-Classification"
+          "value": "FS-Classification"
         },
         "group": "Computation params",
         "order": 24
@@ -322,7 +322,7 @@
         "source": "owner",
         "conditional": {
           "variable": "task_id",
-          "value": "FSL-Classification"
+          "value": "FS-Classification"
         },
         "group": "Computation params",
         "order": 25
