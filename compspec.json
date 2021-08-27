@@ -13,21 +13,6 @@
     "command": [
       "python"
     ],
-    "dockerOptions": {
-      "HostConfig": {
-        "DeviceRequests": [
-          {
-            "Drivers": "nvidia",
-            "Capabilities": [
-              [
-                "gpu"
-              ]
-            ]
-          }
-        ],
-        "ShmSize": 2147483648
-      }
-    },
     "remote": {
       "type": "docker",
       "dockerImage": "coinn",
