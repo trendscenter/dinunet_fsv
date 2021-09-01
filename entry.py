@@ -11,7 +11,7 @@ class Server(COINPyService):
     def get_local(self, msg) -> callable:
         pretrain_args = {'epochs': 11, 'batch_size': 16}
         dataloader_args = {"train": {"drop_last": True}}
-        local = COINNLocal(task_id=TASK_VBM,
+        local = COINNLocal(task_id=TASK_FS,
                            cache=self.cache, input=msg['data']['input'], batch_size=2,
                            state=msg['data']['state'], epochs=11, patience=21, model_scale=1,
                            pretrain_args=None,
