@@ -71,7 +71,8 @@
       "agg_engine": {
         "default": "dSGD",
         "values": [
-          "dSGD"
+          "dSGD",
+          "rankDAD"
         ],
         "label": "Aggregation engine to use",
         "type": "select",
