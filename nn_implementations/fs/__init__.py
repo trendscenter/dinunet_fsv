@@ -1,10 +1,12 @@
 import os
+
 import pandas as pd
 import torch
-from coinstac_dinunet import COINNDataset, COINNTrainer, COINNDataHandle
-from coinstac_dinunet.metrics import Prf1a
 import torch.nn.functional as F
+from coinstac_dinunet import COINNDataset, COINNTrainer, COINNDataHandle
 from coinstac_dinunet.data.datautils import init_k_folds
+from coinstac_dinunet.metrics import Prf1a
+
 from .models import MSANNet
 
 

@@ -14,12 +14,12 @@ agg_engine = 'dSGD'
 
 class Server(COINPyService):
     def get_local(self, msg) -> callable:
-        pretrain_args = {'epochs': 11, 'batch_size': 16}
+        pretrain_args = {'epochs': 21, 'batch_size': 16}
         dataloader_args = {"train": {"drop_last": True}}
         local = COINNLocal(task_id=task,
                            cache=self.cache, input=msg['data']['input'], batch_size=16,
-                           state=msg['data']['state'], epochs=31, patience=21, model_scale=1,
-                           pretrain_args=None,
+                           state=msg['data']['state'], epochs=51, patience=21, model_scale=1,
+                           pretrain_args=pretrain_args,
                            dataloader_args=dataloader_args, agg_engine=agg_engine)
 
         if local.cache['task_id'] == TASK_FS:
@@ -37,5 +37,5 @@ class Server(COINPyService):
             return remote, VBMTrainer
 
 
-server = Server(verbose=False)
+server = Server(verbose=True)
 server.start()

@@ -13,6 +13,21 @@
     "command": [
       "python"
     ],
+    "dockerOptions": {
+      "HostConfig": {
+        "DeviceRequests": [
+          {
+            "Drivers": "nvidia",
+            "Capabilities": [
+              [
+                "gpu"
+              ]
+            ]
+          }
+        ],
+        "ShmSize": 2147483648
+      }
+    },
     "remote": {
       "type": "docker",
       "dockerImage": "coinn",
@@ -196,6 +211,14 @@
         "group": "NN Params",
         "order": 16
       },
+      "pretrain": {
+        "default": false,
+        "label": "Use the site with MAX amount of data to pre-train locally and begin distributed training from there.",
+        "type": "boolean",
+        "source": "owner",
+        "group": "NN Params",
+        "order": 17
+      },
       "pretrain_args": {
         "default": {
           "epochs": 51,
@@ -212,11 +235,11 @@
         "type": "object",
         "source": "member",
         "conditional": {
-          "variable": "mode",
-          "value": "train"
+          "variable": "pretrain",
+          "value": true
         },
         "group": "NN Params",
-        "order": 17
+        "order": 18
       },
       "dataloader_args": {
         "default": {
@@ -228,7 +251,7 @@
         "type": "object",
         "source": "member",
         "group": "NN Params",
-        "order": 18
+        "order": 19
       },
       "split_ratio": {
         "default": [
@@ -240,7 +263,7 @@
         "type": "object",
         "source": "owner",
         "group": "Pick one",
-        "order": 19
+        "order": 20
       },
       "num_folds": {
         "default": null,
@@ -248,7 +271,7 @@
         "type": "number",
         "source": "owner",
         "group": "Pick one",
-        "order": 20
+        "order": 21
       },
       "monitor_metric": {
         "default": "f1",
@@ -261,7 +284,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 21
+        "order": 22
       },
       "metric_direction": {
         "default": "maximize",
@@ -274,7 +297,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 22
+        "order": 23
       },
       "log_header": {
         "default": "Loss|F1",
@@ -282,7 +305,7 @@
         "type": "string",
         "source": "owner",
         "group": "NN Params",
-        "order": 23
+        "order": 24
       },
       "input_size": {
         "default": 66,
@@ -294,7 +317,7 @@
           "value": "FS-Classification"
         },
         "group": "Computation params",
-        "order": 24
+        "order": 25
       },
       "hidden_sizes": {
         "default": [
@@ -311,7 +334,7 @@
           "value": "FS-Classification"
         },
         "group": "Computation params",
-        "order": 25
+        "order": 26
       },
       "num_class": {
         "default": 2,
@@ -319,7 +342,7 @@
         "type": "number",
         "source": "owner",
         "group": "Computation params",
-        "order": 26
+        "order": 27
       },
       "input_channel": {
         "default": 1,
@@ -331,7 +354,7 @@
           "value": "VBM-Classification"
         },
         "group": "Computation params",
-        "order": 27
+        "order": 28
       },
       "labels_column": {
         "default": "isControl",
@@ -339,7 +362,7 @@
         "type": "string",
         "source": "member",
         "group": "Computation params",
-        "order": 28
+        "order": 29
       }
     },
     "output": {
