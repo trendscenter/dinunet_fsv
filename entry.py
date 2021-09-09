@@ -37,5 +37,5 @@ class Server(COINPyService):
             return remote, VBMTrainer
 
 
-server = Server(verbose=True)
+server = Server(verbose=False)
 server.start()
