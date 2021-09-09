@@ -1,4 +1,4 @@
-coinstac-dinunet>=1.1.8
+coinstac-dinunet>=1.2.2
 -f https://download.pytorch.org/whl/torch_stable.html
 torch==1.5.1+cu92
 -f https://download.pytorch.org/whl/torch_stable.html
