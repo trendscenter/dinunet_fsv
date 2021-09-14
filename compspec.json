@@ -4,7 +4,7 @@
     "id": "coinstac-dinunet",
     "version": "v1.0.0",
     "repository": "https:\/\/github.com\/trendscenter\/dinunet_implementations.git",
-    "description": "A wide range of end-to-end NN implementations in COINSTAC",
+    "description": "NN implementations in COINSTAC",
     "compspecVersion": 2
   },
   "computation": {
@@ -13,7 +13,7 @@
     "command": [
       "python"
     ],
-    "dockerOptions": {
+    "containerOptions": {
       "HostConfig": {
         "DeviceRequests": [
           {

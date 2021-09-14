@@ -299,8 +299,8 @@
     "labels_column": {
       "value": "isControl"
     },
-    "num_folds": {
-      "value": 10
+    "split_ratio": {
+      "value": [0.6, 0.2, 0.2]
     },
     "mode": {
       "value": "train"
@@ -537,8 +537,8 @@
     "labels_column": {
       "value": "isControl"
     },
-    "num_folds": {
-      "value": 10
+    "split_ratio": {
+      "value": [0.6, 0.2, 0.2]
     },
     "mode": {
       "value": "train"
@@ -975,8 +975,8 @@
     "labels_column": {
       "value": "isControl"
     },
-    "num_folds": {
-      "value": 10
+    "split_ratio": {
+      "value": [0.6, 0.2, 0.2]
     },
     "mode": {
       "value": "train"
@@ -1333,8 +1333,8 @@
     "labels_column": {
       "value": "isControl"
     },
-    "num_folds": {
-      "value": 10
+    "split_ratio": {
+       "value": [0.6, 0.2, 0.2]
     },
     "mode": {
       "value": "train"
@@ -1851,8 +1851,8 @@
     "labels_column": {
       "value": "isControl"
     },
-    "num_folds": {
-      "value": 10
+    "split_ratio": {
+       "value": [0.6, 0.2, 0.2]
     },
     "mode": {
       "value": "train"
