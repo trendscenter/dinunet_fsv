@@ -336,13 +336,25 @@
         "group": "Computation params",
         "order": 26
       },
+      "model_scale": {
+        "default": 1,
+        "label": "Scale factor for NN model.",
+        "type": "number",
+        "source": "owner",
+        "conditional": {
+          "variable": "task_id",
+          "value": "VBM-Classification"
+        },
+        "group": "Computation params",
+        "order": 27
+      },
       "num_class": {
         "default": 2,
         "label": "Number of classes",
         "type": "number",
         "source": "owner",
         "group": "Computation params",
-        "order": 27
+        "order": 28
       },
       "input_channel": {
         "default": 1,
@@ -354,7 +366,7 @@
           "value": "VBM-Classification"
         },
         "group": "Computation params",
-        "order": 28
+        "order": 29
       },
       "labels_column": {
         "default": "isControl",
@@ -362,7 +374,7 @@
         "type": "string",
         "source": "member",
         "group": "Computation params",
-        "order": 29
+        "order": 30
       }
     },
     "output": {
