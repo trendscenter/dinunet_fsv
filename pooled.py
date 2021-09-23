@@ -1,8 +1,5 @@
-
-import coinstac_dinunet.io as io
-io.enable_io = False
-
 from coinstac_dinunet import PooledTrainer
+
 from nn_implementations.fs import FreeSurferTrainer, FreeSurferDataset
 
 if __name__ == "__main__":

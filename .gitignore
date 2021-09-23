@@ -120,8 +120,4 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
-datasets/*/output
-datasets/*/input
-datasets/*/cache
-datasets/*/transfer
-datasets/*/system
+datasets
