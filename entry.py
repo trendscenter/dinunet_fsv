@@ -5,7 +5,6 @@ from nn_implementations.fs import FreeSurferDataset, FreeSurferTrainer, FSVDataH
 from nn_implementations.vbm import VBMDataset, VBMTrainer, VBMDataHandle
 
 TASK_FS = "FS-Classification"
-TASK_VBM = "VBM-Classification"
 
 """ Test """
 task = TASK_FS
@@ -24,8 +23,6 @@ class Server(COINPyService):
 
         if local.cache['task_id'] == TASK_FS:
             return local, FreeSurferTrainer, FreeSurferDataset, FSVDataHandle
-        elif local.cache['task_id'] == TASK_VBM:
-            return local, VBMTrainer, VBMDataset, VBMDataHandle
 
     def get_remote(self, msg) -> callable:
         remote = COINNRemote(cache=self.cache, input=msg['data']['input'],
@@ -33,8 +30,6 @@ class Server(COINPyService):
 
         if remote.cache['task_id'] == TASK_FS:
             return remote, FreeSurferTrainer
-        elif remote.cache['task_id'] == TASK_VBM:
-            return remote, VBMTrainer
 
 
 server = Server(verbose=False)

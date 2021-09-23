@@ -1,10 +1,10 @@
 {
   "meta": {
-    "name": "Decentralized Deep Artificial Neural Networks in COINSTAC",
+    "name": "Decentralized Deep Artificial Neural Networks in COINSTAC (CPU capability only)",
     "id": "coinstac-dinunet",
     "version": "v1.0.0",
     "repository": "https:\/\/github.com\/trendscenter\/dinunet_implementations.git",
-    "description": "NN implementations in COINSTAC",
+    "description": "NN implementations in COINSTAC for task that can be run in CPU only. Please use GPU version for GPU acceleration.",
     "compspecVersion": 2
   },
   "computation": {
@@ -13,21 +13,6 @@
     "command": [
       "python"
     ],
-    "containerOptions": {
-      "HostConfig": {
-        "DeviceRequests": [
-          {
-            "Drivers": "nvidia",
-            "Capabilities": [
-              [
-                "gpu"
-              ]
-            ]
-          }
-        ],
-        "ShmSize": 2147483648
-      }
-    },
     "remote": {
       "type": "docker",
       "dockerImage": "coinn",
@@ -62,8 +47,7 @@
       "task_id": {
         "default": "FS-Classification",
         "values": [
-          "FS-Classification",
-          "VBM-Classification"
+          "FS-Classification"
         ],
         "label": "Which task to run?",
         "type": "select",
@@ -180,7 +164,7 @@
         "order": 13
       },
       "patience": {
-        "default": 101,
+        "default": 35,
         "label": "Early stop patience epochs",
         "type": "number",
         "source": "owner",
@@ -198,18 +182,6 @@
         "source": "owner",
         "group": "NN Params",
         "order": 15
-      },
-      "load_sparse": {
-        "default": false,
-        "label": "Load each data item in single dataloader(Useful when working with patches of images like in semantic segmentation.)",
-        "type": "boolean",
-        "source": "owner",
-        "conditional": {
-          "variable": "task_id",
-          "value": "N/A"
-        },
-        "group": "NN Params",
-        "order": 16
       },
       "pretrain": {
         "default": false,
@@ -336,37 +308,13 @@
         "group": "Computation params",
         "order": 26
       },
-      "model_scale": {
-        "default": 1,
-        "label": "Scale factor for NN model.",
-        "type": "number",
-        "source": "owner",
-        "conditional": {
-          "variable": "task_id",
-          "value": "VBM-Classification"
-        },
-        "group": "Computation params",
-        "order": 27
-      },
       "num_class": {
         "default": 2,
         "label": "Number of classes",
         "type": "number",
         "source": "owner",
         "group": "Computation params",
-        "order": 28
-      },
-      "input_channel": {
-        "default": 1,
-        "label": "Number of input channels",
-        "type": "number",
-        "source": "owner",
-        "conditional": {
-          "variable": "task_id",
-          "value": "VBM-Classification"
-        },
-        "group": "Computation params",
-        "order": 29
+        "order": 27
       },
       "labels_column": {
         "default": "isControl",
@@ -374,7 +322,7 @@
         "type": "string",
         "source": "member",
         "group": "Computation params",
-        "order": 30
+        "order": 28
       }
     },
     "output": {
