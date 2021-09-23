@@ -2,7 +2,6 @@ from coinstac_dinunet import COINNLocal, COINNRemote
 from coinstac_dinunet.io import COINPyService
 
 from nn_implementations.fs import FreeSurferDataset, FreeSurferTrainer, FSVDataHandle
-from nn_implementations.vbm import VBMDataset, VBMTrainer, VBMDataHandle
 
 TASK_FS = "FS-Classification"
 
