@@ -83,13 +83,21 @@
         "group": "NN Params",
         "order": 5
       },
+      "num_reducers": {
+        "default": 2,
+        "label": "NUm of reducers in the aggregator. ",
+        "type": "number",
+        "source": "owner",
+        "group": "NN Params",
+        "order": 6
+      },
       "batch_size": {
         "default": 16,
         "label": "Batch size",
         "type": "number",
         "source": "member",
         "group": "NN Params",
-        "order": 6
+        "order": 7
       },
       "local_iterations": {
         "default": 1,
@@ -101,7 +109,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 7
+        "order": 8
       },
       "learning_rate": {
         "default": 0.001,
@@ -113,7 +121,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 8
+        "order": 9
       },
       "epochs": {
         "default": 101,
@@ -125,7 +133,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 9
+        "order": 10
       },
       "validation_epochs": {
         "default": 1,
@@ -137,7 +145,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 10
+        "order": 11
       },
       "pin_memory": {
         "default": false,
@@ -181,7 +189,7 @@
         "type": "boolean",
         "source": "owner",
         "group": "NN Params",
-        "order": 17
+        "order": 16
       },
       "pretrain_args": {
         "default": {
@@ -203,7 +211,7 @@
           "value": true
         },
         "group": "NN Params",
-        "order": 18
+        "order": 17
       },
       "dataloader_args": {
         "default": {
@@ -215,7 +223,7 @@
         "type": "object",
         "source": "member",
         "group": "NN Params",
-        "order": 19
+        "order": 18
       },
       "split_ratio": {
         "default": [
@@ -227,7 +235,7 @@
         "type": "object",
         "source": "owner",
         "group": "Pick one",
-        "order": 20
+        "order": 19
       },
       "num_folds": {
         "default": null,
@@ -235,7 +243,7 @@
         "type": "number",
         "source": "owner",
         "group": "Pick one",
-        "order": 21
+        "order": 20
       },
       "monitor_metric": {
         "default": "f1",
@@ -248,7 +256,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 22
+        "order": 21
       },
       "metric_direction": {
         "default": "maximize",
@@ -261,7 +269,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 23
+        "order": 22
       },
       "log_header": {
         "default": "Loss|F1",
@@ -269,7 +277,7 @@
         "type": "string",
         "source": "owner",
         "group": "NN Params",
-        "order": 24
+        "order": 23
       },
       "input_size": {
         "default": 66,
@@ -281,7 +289,7 @@
           "value": "FS-Classification"
         },
         "group": "Computation params",
-        "order": 25
+        "order": 24
       },
       "hidden_sizes": {
         "default": [
@@ -298,7 +306,7 @@
           "value": "FS-Classification"
         },
         "group": "Computation params",
-        "order": 26
+        "order": 25
       },
       "num_class": {
         "default": 2,
@@ -306,7 +314,7 @@
         "type": "number",
         "source": "owner",
         "group": "Computation params",
-        "order": 27
+        "order": 26
       },
       "labels_column": {
         "default": "isControl",
@@ -314,7 +322,7 @@
         "type": "string",
         "source": "member",
         "group": "Computation params",
-        "order": 28
+        "order": 27
       }
     },
     "output": {
