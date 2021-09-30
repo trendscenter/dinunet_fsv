@@ -9,13 +9,13 @@
   },
   "computation": {
     "type": "docker",
-    "dockerImage": "coinn",
+    "dockerImage": "nn",
     "command": [
       "python"
     ],
     "remote": {
       "type": "docker",
-      "dockerImage": "coinn",
+      "dockerImage": "nn",
       "command": [
         "python"
       ]
