@@ -226,7 +226,7 @@
         "order": 18
       },
       "split_ratio": {
-        "default": null,
+        "default": [0.8, 0.1, 0.1],
         "label": "Data split ratio for train, validation, and/or test. Eg. [0.6, 0.2, 0.2], [0.8, 0.2], or [1](Default keys- train/validation/test will be used from left to right)",
         "type": "object",
         "source": "owner",
@@ -234,7 +234,7 @@
         "order": 19
       },
       "num_folds": {
-        "default": 10,
+        "default": null,
         "label": "K-Fold Cross Validation, K? (Mutually exclusive with data split ratio)",
         "type": "number",
         "source": "owner",

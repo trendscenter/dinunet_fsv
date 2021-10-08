@@ -1,7 +1,9 @@
 import multiprocessing as mp
-import coinstac
+import time
 
+import coinstac
 from coinstac_dinunet import COINNRemote
+from coinstac_dinunet.utils import duration
 
 from comps import NNComputation, FreeSurferTrainer
 
@@ -9,23 +11,25 @@ _cache = {}
 _pool = None
 
 
-def args(cache):
-    if cache['task_id'] == NNComputation.TASK_FREE_SURFER:
-        return FreeSurferTrainer,
-    else:
-        raise ValueError(f"Invalid remote task:{cache.get('task')}")
-
-
 def run(data):
     global _pool
     global _cache
 
-    _cache['total_duration'] = coinstac.compTime
+    start_time = _cache.setdefault('start_time', time.time())
     if _pool is None:
         _pool = mp.Pool(processes=data['input'].get('num_reducers', 2))
 
     remote = COINNRemote(
         cache=_cache, input=data['input'], state=data['state']
     )
+    if remote.cache['task_id'] == NNComputation.TASK_FREE_SURFER:
+        args = FreeSurferTrainer,
+    else:
+        raise ValueError(f"Invalid remote task:{remote.cache.get('task')}")
 
-    return remote(_pool, *args(_cache))
+    out = remote(_pool, *args)
+
+    _cache['total_duration'] = f"{duration(start_time)}"
+    _cache['total_remote_comp_duration'] = coinstac.compTime
+
+    return out
