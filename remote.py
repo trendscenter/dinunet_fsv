@@ -1,8 +1,9 @@
 import multiprocessing as mp
+import coinstac
 
 from coinstac_dinunet import COINNRemote
 
-from computations import NNComputation, FreeSurferTrainer
+from comps import NNComputation, FreeSurferTrainer
 
 _cache = {}
 _pool = None
@@ -19,6 +20,7 @@ def run(data):
     global _pool
     global _cache
 
+    _cache['total_duration'] = coinstac.compTime
     if _pool is None:
         _pool = mp.Pool(processes=data['input'].get('num_reducers', 2))
 
