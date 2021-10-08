@@ -15,7 +15,7 @@ def args(cache):
         raise ValueError(f"Invalid remote task:{cache.get('task')}")
 
 
-def start(data):
+def run(data):
     global _pool
     global _cache
 
