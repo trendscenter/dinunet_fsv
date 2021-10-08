@@ -299,9 +299,6 @@
     "labels_column": {
       "value": "isControl"
     },
-    "split_ratio": {
-      "value": [0.6, 0.2, 0.2]
-    },
     "mode": {
       "value": "train"
     },
@@ -536,9 +533,6 @@
     },
     "labels_column": {
       "value": "isControl"
-    },
-    "split_ratio": {
-      "value": [0.6, 0.2, 0.2]
     },
     "mode": {
       "value": "train"
@@ -975,9 +969,6 @@
     "labels_column": {
       "value": "isControl"
     },
-    "split_ratio": {
-      "value": [0.6, 0.2, 0.2]
-    },
     "mode": {
       "value": "train"
     },
@@ -1332,9 +1323,6 @@
     },
     "labels_column": {
       "value": "isControl"
-    },
-    "split_ratio": {
-       "value": [0.6, 0.2, 0.2]
     },
     "mode": {
       "value": "train"
@@ -1850,9 +1838,6 @@
     },
     "labels_column": {
       "value": "isControl"
-    },
-    "split_ratio": {
-       "value": [0.6, 0.2, 0.2]
     },
     "mode": {
       "value": "train"

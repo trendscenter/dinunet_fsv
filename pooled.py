@@ -1,6 +1,6 @@
 from coinstac_dinunet import PooledTrainer
 
-from nn_implementations.fs import FreeSurferTrainer, FreeSurferDataset
+from computations.fs import FreeSurferTrainer, FreeSurferDataset
 
 if __name__ == "__main__":
     trainer = PooledTrainer(FreeSurferTrainer,
