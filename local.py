@@ -20,10 +20,9 @@ def run(data):
     global _pool
     global _cache
 
+    start_time = _cache.setdefault('start_time', time.time())
     if _pool is None:
         _pool = mp.Pool(processes=data['input'].get('num_reducers', 2))
-
-    start_time = _cache.setdefault('start_time', time.time())
 
     dataloader_args = {"train": {"drop_last": True}}
     local = COINNLocal(
@@ -39,7 +38,7 @@ def run(data):
         raise ValueError(f"Invalid local task:{local.cache.get('task')}")
 
     out = local(_pool, *args)
-    _cache['total_duration'] = f"{duration(start_time)}"
     _cache['total_local_comp_duration'] = coinstac.compTime
+    _cache['total_duration'] = f"{duration(start_time)}"
 
     return out

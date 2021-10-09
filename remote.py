@@ -29,7 +29,7 @@ def run(data):
 
     out = remote(_pool, *args)
 
-    _cache['total_duration'] = f"{duration(start_time)}"
     _cache['total_remote_comp_duration'] = coinstac.compTime
+    _cache['total_duration'] = f"{duration(start_time)}"
 
     return out
