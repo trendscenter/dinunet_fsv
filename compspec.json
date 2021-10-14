@@ -164,7 +164,7 @@
         "order": 13
       },
       "patience": {
-        "default": 35,
+        "default": 101,
         "label": "Early stop patience epochs",
         "type": "number",
         "source": "owner",
