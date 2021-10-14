@@ -23,6 +23,8 @@ def run(data):
     remote = COINNRemote(
         cache=CACHE, input=data['input'], state=data['state']
     )
+
+    """Add new NN computation Here"""
     if remote.cache['task_id'] == NNComputation.TASK_FREE_SURFER:
         args = FreeSurferTrainer,
     else:
