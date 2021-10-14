@@ -22,27 +22,27 @@
     },
     "input": {
       "covariates": {
-        "order": 1,
         "label": "Covariates",
-        "type": "array",
+        "type": "csv",
         "items": [
           "boolean",
           "number"
-        ]
+        ],
+        "source": "member",
+        "order": 1
       },
       "data": {
-        "order": 2,
         "label": "Data",
-        "type": "array",
+        "type": "freesurfer",
         "items": [
           "FreeSurfer"
         ],
         "extensions": [
-          [
-            "csv",
-            "txt"
-          ]
-        ]
+          "csv",
+          "txt"
+        ],
+        "source": "owner",
+        "order": 2
       },
       "task_id": {
         "default": "FS-Classification",
@@ -215,9 +215,15 @@
       },
       "dataloader_args": {
         "default": {
-          "train": {"drop_last": true},
-          "validation": {"drop_last": false},
-          "test": {"drop_last": false}
+          "train": {
+            "drop_last": true
+          },
+          "validation": {
+            "drop_last": false
+          },
+          "test": {
+            "drop_last": false
+          }
         },
         "label": "Dataloader arguments (Will override the main arguments above)",
         "type": "object",
@@ -226,7 +232,11 @@
         "order": 18
       },
       "split_ratio": {
-        "default": [0.8, 0.1, 0.1],
+        "default": [
+          0.8,
+          0.1,
+          0.1
+        ],
         "label": "Data split ratio for train, validation, and/or test. Eg. [0.6, 0.2, 0.2], [0.8, 0.2], or [1](Default keys- train/validation/test will be used from left to right)",
         "type": "object",
         "source": "owner",
@@ -245,7 +255,15 @@
         "default": "f1",
         "label": "Metric to monitor for model selection.",
         "type": "select",
-        "values": ["f1", "accuracy", "precision", "recall", "overlap", "average", "time"],
+        "values": [
+          "f1",
+          "accuracy",
+          "precision",
+          "recall",
+          "overlap",
+          "average",
+          "time"
+        ],
         "source": "owner",
         "conditional": {
           "variable": "mode",
@@ -258,7 +276,10 @@
         "default": "maximize",
         "label": "Metric direction of improvement.",
         "type": "select",
-        "values": ["maximize", "minimize"],
+        "values": [
+          "maximize",
+          "minimize"
+        ],
         "source": "owner",
         "conditional": {
           "variable": "mode",
@@ -323,7 +344,8 @@
     },
     "output": {
     },
-    "display": [
-    ]
+    "display": {
+      "type": "string"
+    }
   }
 }
