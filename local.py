@@ -42,5 +42,5 @@ def run(data):
     out = local(MP_POOL, *args)
 
     duration(CACHE, _start, key='time_spent_on_computation')
-    duration(CACHE, start_time, key='total_duration')
+    duration(CACHE, start_time, key='cumulative_total_duration')
     return out
