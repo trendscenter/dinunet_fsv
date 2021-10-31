@@ -49,7 +49,7 @@
         "values": [
           "FS-Classification"
         ],
-        "label": "Which task to run?",
+        "label": "Pick a NN task:",
         "type": "select",
         "source": "owner",
         "group": "NN Params",
