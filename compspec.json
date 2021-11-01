@@ -167,16 +167,6 @@
         "group": "NN Params",
         "order": 12
       },
-      "gpus": {
-        "default": [
-          0
-        ],
-        "label": "GPU IDs to use Eg. [0], [0, 1]:",
-        "type": "object",
-        "source": "member",
-        "group": "NN Params",
-        "order": 13
-      },
       "pin_memory": {
         "default": false,
         "label": "Pin Memory:",
