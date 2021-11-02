@@ -99,6 +99,14 @@
         "group": "NN Params",
         "order": 7
       },
+      "local_iterations": {
+        "default": 1,
+        "label": "Local gradient accumulation iterations(effective batch size = batch size * gradient accumulation iterations)",
+        "type": "number",
+        "source": "owner",
+        "group": "NN Params",
+        "order": 8
+      },
       "learning_rate": {
         "default": 0.001,
         "label": "Learning rate:",
@@ -109,7 +117,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 8
+        "order": 9
       },
       "epochs": {
         "default": 101,
@@ -121,7 +129,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 9
+        "order": 10
       },
       "pretrain": {
         "default": false,
@@ -129,7 +137,7 @@
         "type": "boolean",
         "source": "owner",
         "group": "NN Params",
-        "order": 10
+        "order": 11
       },
       "pretrain_args": {
         "default": {
@@ -150,15 +158,43 @@
           "value": true
         },
         "group": "NN Params",
-        "order": 11
+        "order": 12
+      },
+      "validation_epochs": {
+        "default": 1,
+        "label": "Run validation after every epochs:",
+        "type": "number",
+        "source": "owner",
+        "conditional": {
+          "variable": "mode",
+          "value": "train"
+        },
+        "group": "NN Params",
+        "order": 13
+      },
+      "precision_bits": {
+        "default": "32",
+        "label": "Floating point precision for payload:",
+        "type": "select",
+        "values": [
+          "32",
+          "16"
+        ],
+        "source": "owner",
+        "conditional": {
+          "variable": "mode",
+          "value": "train"
+        },
+        "group": "NN Params",
+        "order": 14
       },
       "pin_memory": {
         "default": false,
         "label": "Pin Memory:",
         "type": "boolean",
-        "source": "owner",
+        "source": "member",
         "group": "NN Params",
-        "order": 14
+        "order": 15
       },
       "num_workers": {
         "default": 0,
@@ -166,7 +202,7 @@
         "type": "number",
         "source": "member",
         "group": "NN Params",
-        "order": 15
+        "order": 16
       },
       "patience": {
         "default": 35,
@@ -178,7 +214,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 16
+        "order": 17
       },
       "monitor_metric": {
         "default": "f1",
@@ -199,7 +235,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 17
+        "order": 18
       },
       "metric_direction": {
         "default": "maximize",
@@ -215,7 +251,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 18
+        "order": 19
       },
       "log_header": {
         "default": "Loss|F1",
@@ -223,7 +259,7 @@
         "type": "string",
         "source": "owner",
         "group": "NN Params",
-        "order": 19
+        "order": 20
       },
       "split_ratio": {
         "default": [
@@ -235,7 +271,7 @@
         "type": "object",
         "source": "owner",
         "group": "NN Params",
-        "order": 20
+        "order": 21
       },
       "num_folds": {
         "default": null,
@@ -243,7 +279,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 21
+        "order": 22
       },
       "FS-Classification_args": {
         "default": {
@@ -256,9 +292,6 @@
             32
           ],
           "num_class": 2,
-          "local_iterations": 1,
-          "validation_epochs": 1,
-          "precision_bits": 32,
           "dad_reduction_rank": 10,
           "dad_num_pow_iters": 5,
           "dad_tol": 0.001
@@ -271,7 +304,7 @@
           "variable": "task_id",
           "value": "FS-Classification"
         },
-        "order": 22
+        "order": 23
       }
     },
     "output": {
