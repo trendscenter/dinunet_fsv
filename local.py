@@ -22,14 +22,14 @@ def run(data):
     _start = time.time()
     start_time = CACHE.setdefault('start_time', _start)
 
-    if MP_POOL is None:
-        MP_POOL = mp.Pool(processes=data['input'].get('num_reducers', 2))
+    if MP_POOL is None and CACHE.get('num_reducers'):
+        MP_POOL = mp.Pool(processes=CACHE['num_reducers'])
 
     dataloader_args = {"train": {"drop_last": True}}
     local = COINNLocal(
         task_id=computation, agg_engine=agg_engine,
         cache=CACHE, input=data['input'], batch_size=16,
-        state=data['state'], epochs=101, patience=101, split_ratio=[0.8, 0.1, 0.1],
+        state=data['state'], epochs=31, patience=31, split_ratio=[0.8, 0.1, 0.1],
         pretrain_args=None, dataloader_args=dataloader_args
     )
 
