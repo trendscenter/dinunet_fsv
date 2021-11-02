@@ -1,3 +1,3 @@
 torch==1.9.0
 coinstac>=0.2.0
-coinstac-dinunet>=2.1.0
+coinstac-dinunet>=2.1.5
