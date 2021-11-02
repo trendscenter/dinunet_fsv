@@ -152,18 +152,6 @@
         "group": "NN Params",
         "order": 11
       },
-      "validation_epochs": {
-        "default": 1,
-        "label": "Run validation after epochs:",
-        "type": "number",
-        "source": "owner",
-        "conditional": {
-          "variable": "mode",
-          "value": "train"
-        },
-        "group": "NN Params",
-        "order": 12
-      },
       "pin_memory": {
         "default": false,
         "label": "Pin Memory:",
