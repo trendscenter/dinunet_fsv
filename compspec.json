@@ -95,7 +95,7 @@
         "default": 16,
         "label": "Batch size:",
         "type": "number",
-        "source": "member",
+        "source": "owner",
         "group": "NN Params",
         "order": 7
       },
@@ -156,7 +156,7 @@
         "default": false,
         "label": "Pin Memory:",
         "type": "boolean",
-        "source": "member",
+        "source": "owner",
         "group": "NN Params",
         "order": 14
       },
