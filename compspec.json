@@ -271,6 +271,9 @@
             32
           ],
           "num_class": 2,
+          "local_iterations": 1,
+          "validation_epochs": 1,
+          "precision_bits": 32,
           "dad_reduction_rank": 10,
           "dad_num_pow_iters": 5,
           "dad_tol": 0.001
