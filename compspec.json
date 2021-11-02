@@ -144,7 +144,7 @@
         },
         "label": "Pretraining arguments:",
         "type": "object",
-        "source": "member",
+        "source": "owner",
         "conditional": {
           "variable": "pretrain",
           "value": true
