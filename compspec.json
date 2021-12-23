@@ -47,7 +47,8 @@
       "task_id": {
         "default": "FS-Classification",
         "values": [
-          "FS-Classification"
+          "FS-Classification",
+          "ICA-Classification"
         ],
         "label": "Pick a NN task:",
         "type": "select",
@@ -216,51 +217,6 @@
         "group": "NN Params",
         "order": 17
       },
-      "monitor_metric": {
-        "default": "f1",
-        "label": "Metric to monitor for model selection:",
-        "type": "select",
-        "values": [
-          "f1",
-          "accuracy",
-          "precision",
-          "recall",
-          "overlap",
-          "average",
-          "time"
-        ],
-        "source": "owner",
-        "conditional": {
-          "variable": "mode",
-          "value": "train"
-        },
-        "group": "NN Params",
-        "order": 18
-      },
-      "metric_direction": {
-        "default": "maximize",
-        "label": "Pick metrics direction of improvement:",
-        "type": "select",
-        "values": [
-          "maximize",
-          "minimize"
-        ],
-        "source": "owner",
-        "conditional": {
-          "variable": "mode",
-          "value": "train"
-        },
-        "group": "NN Params",
-        "order": 19
-      },
-      "log_header": {
-        "default": "Loss|F1",
-        "label": "Plots to be generated. Separate plots for items separated by pipe '|':",
-        "type": "string",
-        "source": "owner",
-        "group": "NN Params",
-        "order": 20
-      },
       "split_ratio": {
         "default": [
           0.8,
@@ -305,6 +261,23 @@
           "value": "FS-Classification"
         },
         "order": 23
+      },
+      "ICA-Classification_args": {
+        "default": {
+          "labels_column": "isControl",
+          "model_scale": 1,
+          "input_channel": 1,
+          "num_class": 2
+        },
+        "label": "ICA classification parameters.",
+        "type": "object",
+        "source": "owner",
+        "conditional": {
+          "variable": "task_id",
+          "value": "ICA-Classification"
+        },
+        "group": "Computation",
+        "order": 26
       }
     },
     "output": {
