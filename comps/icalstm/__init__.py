@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from coinstac_dinunet import COINNDataset, COINNTrainer, COINNDataHandle
-from coinstac_dinunet.metrics import Prf1a, AUCROCMetrics
+from coinstac_dinunet.metrics import AUCROCMetrics
 
 from .models import ICALstm
 
