@@ -11,6 +11,7 @@ from coinstac_dinunet.metrics import AUCROCMetrics
 
 from .models import ICALstm
 
+
 def read_lines(file):
     return np.array([int(float(l.strip())) for l in open(file).readlines()])
 
