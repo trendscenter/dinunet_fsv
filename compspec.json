@@ -278,7 +278,9 @@
           "components_file": "<Required!>",
           "input_size": 256,
           "hidden_size": 384,
-          "proj_size": 128
+          "dad_reduction_rank": 10,
+          "dad_num_pow_iters": 5,
+          "dad_tol": 0.001
         },
         "label": "ICA classification parameters.",
         "type": "object",
