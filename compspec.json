@@ -273,10 +273,9 @@
           "window_size": 20,
           "window_stride": 10,
           "seq_len": 13,
-          "data_file": "<Required>",
-          "labels_file": "<Required>",
-          "components_file": "<Required>",
-          "num_layers": 1,
+          "data_file": "<Required!>",
+          "labels_file": "<Required!>",
+          "components_file": "<Required!>",
           "input_size": 256,
           "hidden_size": 384,
           "proj_size": 128
