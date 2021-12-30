@@ -21,22 +21,33 @@
       ]
     },
     "input": {
+      "covariates": {
+        "label": "Covariates",
+        "type": "csv",
+        "items": [
+          "boolean",
+          "number"
+        ],
+        "source": "member",
+        "order": 1
+      },
       "data": {
         "label": "Data",
-        "type": "files",
+        "type": "freesurfer",
         "items": [
-          "files"
+          "FreeSurfer"
         ],
         "extensions": [
           "csv",
-          "h5"
+          "txt"
         ],
         "source": "owner",
         "order": 2
       },
       "task_id": {
-        "default":  "ICA-Classification",
+        "default": "FS-Classification",
         "values": [
+          "FS-Classification",
           "ICA-Classification"
         ],
         "label": "Pick a NN task:",
@@ -225,6 +236,31 @@
         "source": "owner",
         "group": "NN Params",
         "order": 22
+      },
+      "FS-Classification_args": {
+        "default": {
+          "labels_column": "isControl",
+          "input_size": 66,
+          "hidden_sizes": [
+            256,
+            128,
+            64,
+            32
+          ],
+          "num_class": 2,
+          "dad_reduction_rank": 10,
+          "dad_num_pow_iters": 5,
+          "dad_tol": 0.001
+        },
+        "label": "FreeSurfer classification parameters.",
+        "type": "object",
+        "source": "owner",
+        "group": "Computation",
+        "conditional": {
+          "variable": "task_id",
+          "value": "FS-Classification"
+        },
+        "order": 23
       },
       "ICA-Classification_args": {
         "default": {
