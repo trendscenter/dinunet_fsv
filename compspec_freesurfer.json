@@ -21,23 +21,33 @@
       ]
     },
     "input": {
+      "covariates": {
+        "label": "Covariates",
+        "type": "csv",
+        "items": [
+          "boolean",
+          "number"
+        ],
+        "source": "member",
+        "order": 1
+      },
       "data": {
         "label": "Data",
-        "type": "files",
+        "type": "freesurfer",
         "items": [
-          "files"
+          "FreeSurfer"
         ],
         "extensions": [
           "csv",
-          "h5"
+          "txt"
         ],
         "source": "owner",
         "order": 2
       },
       "task_id": {
-        "default":  "ICA-Classification",
+        "default": "FS-Classification",
         "values": [
-          "ICA-Classification"
+          "FS-Classification"
         ],
         "label": "Pick a NN task:",
         "type": "select",
@@ -226,35 +236,30 @@
         "group": "NN Params",
         "order": 22
       },
-      "ICA-Classification_args": {
+      "FS-Classification_args": {
         "default": {
+          "labels_column": "isControl",
+          "input_size": 66,
+          "hidden_sizes": [
+            256,
+            128,
+            64,
+            32
+          ],
           "num_class": 2,
-          "monitor_metric": "auc",
-          "metric_direction": "maximize",
-          "log_header": "Loss|AUC",
-          "full_comp_size": 100,
-          "spatial_dim": 140,
-          "window_size": 20,
-          "window_stride": 10,
-          "seq_len": 13,
-          "data_file": "<Required!>",
-          "labels_file": "<Required!>",
-          "components_file": "<Required!>",
-          "input_size": 256,
-          "hidden_size": 384,
           "dad_reduction_rank": 10,
           "dad_num_pow_iters": 5,
           "dad_tol": 0.001
         },
-        "label": "ICA classification parameters.",
+        "label": "FreeSurfer classification parameters.",
         "type": "object",
         "source": "owner",
+        "group": "Computation",
         "conditional": {
           "variable": "task_id",
-          "value": "ICA-Classification"
+          "value": "FS-Classification"
         },
-        "group": "Computation",
-        "order": 26
+        "order": 23
       }
     },
     "output": {
