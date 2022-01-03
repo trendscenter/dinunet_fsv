@@ -27,12 +27,12 @@ def run(data):
         MP_POOL = mp.Pool(processes=CACHE['num_reducers'])
 
     dataloader_args = {"train": {"drop_last": True}}
-    pretrain_args = {'epochs': 11}
+
     local = COINNLocal(
         task_id=computation, agg_engine=agg_engine,
         cache=CACHE, input=data['input'], batch_size=16,
         state=data['state'], epochs=11, patience=31, split_ratio=[0.8, 0.1, 0.1],
-        pretrain_args=pretrain_args, dataloader_args=dataloader_args
+        pretrain_args=None, dataloader_args=dataloader_args
     )
 
     """Add new NN computation Here"""
