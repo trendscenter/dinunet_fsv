@@ -1,4 +1,4 @@
 torch==1.9.0
 coinstac>=0.2.0
-coinstac-dinunet~=2.3.4
+coinstac-dinunet~=2.3.6
 h5py>=3.1.0
