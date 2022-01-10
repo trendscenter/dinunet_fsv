@@ -40,7 +40,8 @@
         "extensions": [
           "csv",
           "txt",
-          "h5"
+          "h5",
+          "json"
         ],
         "source": "member",
         "order": 2
