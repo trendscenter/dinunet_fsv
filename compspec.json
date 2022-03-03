@@ -88,7 +88,7 @@
       },
       "num_reducers": {
         "default": 2,
-        "label": "Number of reducers in the aggregator(Depends on number of sites):",
+        "label": "Number of local reducers:",
         "type": "number",
         "source": "owner",
         "group": "NN Params",
