@@ -28,6 +28,10 @@
           "boolean",
           "number"
         ],
+        "extensions": [
+          "csv",
+          "txt"
+        ],
         "source": "member",
         "order": 1
       },
