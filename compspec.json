@@ -21,20 +21,6 @@
       ]
     },
     "input": {
-      "covariates": {
-        "label": "Covariates",
-        "type": "csv",
-        "items": [
-          "boolean",
-          "number"
-        ],
-        "extensions": [
-          "csv",
-          "txt"
-        ],
-        "source": "member",
-        "order": 1
-      },
       "data": {
         "label": "Data",
         "type": "files",
@@ -91,13 +77,46 @@
         "group": "NN Params",
         "order": 5
       },
+      "rankDAD_args": {
+        "default": {
+          "dad_reduction_rank": 10,
+          "dad_num_pow_iters": 5,
+          "dad_tol": 0.001
+        },
+        "label": "RankDAD engine parameters.",
+        "type": "object",
+        "source": "owner",
+        "group": "NN Params",
+        "conditional": {
+          "variable": "agg_engine",
+          "value": "rankDAD"
+        },
+        "order": 6
+      },
+      "powerSGD_args": {
+        "default": {
+          "matrix_approximation_rank": 1,
+          "start_powerSGD_iter": 10,
+          "use_error_feedback": true,
+          "warm_start": true
+        },
+        "label": "PowerSGD engine parameters.",
+        "type": "object",
+        "source": "owner",
+        "group": "NN Params",
+        "conditional": {
+          "variable": "agg_engine",
+          "value": "powerSGD"
+        },
+        "order": 7
+      },
       "num_reducers": {
         "default": 2,
         "label": "Number of local reducers:",
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 6
+        "order": 8
       },
       "batch_size": {
         "default": 16,
@@ -105,7 +124,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 7
+        "order": 9
       },
       "local_iterations": {
         "default": 1,
@@ -113,7 +132,7 @@
         "type": "number",
         "source": "owner",
         "group": "NN Params",
-        "order": 8
+        "order": 10
       },
       "learning_rate": {
         "default": 0.001,
@@ -125,7 +144,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 9
+        "order": 11
       },
       "epochs": {
         "default": 101,
@@ -137,7 +156,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 10
+        "order": 12
       },
       "pretrain": {
         "default": false,
@@ -145,7 +164,7 @@
         "type": "boolean",
         "source": "owner",
         "group": "NN Params",
-        "order": 11
+        "order": 13
       },
       "pretrain_args": {
         "default": {
@@ -166,7 +185,7 @@
           "value": true
         },
         "group": "NN Params",
-        "order": 12
+        "order": 14
       },
       "validation_epochs": {
         "default": 1,
@@ -178,7 +197,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 13
+        "order": 15
       },
       "precision_bits": {
         "default": "32",
@@ -194,7 +213,7 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 14
+        "order": 16
       },
       "pin_memory": {
         "default": false,
@@ -202,7 +221,7 @@
         "type": "boolean",
         "source": "member",
         "group": "NN Params",
-        "order": 15
+        "order": 18
       },
       "num_workers": {
         "default": 0,
@@ -210,7 +229,7 @@
         "type": "number",
         "source": "member",
         "group": "NN Params",
-        "order": 16
+        "order": 19
       },
       "patience": {
         "default": 35,
@@ -222,13 +241,13 @@
           "value": "train"
         },
         "group": "NN Params",
-        "order": 17
+        "order": 20
       },
       "split_ratio": {
         "default": [
-          0.8,
-          0.1,
-          0.1
+          0.7,
+          0.15,
+          0.15
         ],
         "label": "Data split ratio for train, validation, test in the same order:",
         "type": "object",
@@ -244,41 +263,18 @@
         "group": "NN Params",
         "order": 22
       },
-      "rankDAD_args": {
-        "default": {
-          "dad_reduction_rank": 10,
-          "dad_num_pow_iters": 5,
-          "dad_tol": 0.001
-        },
-        "label": "RankDAD engine parameters.",
-        "type": "object",
+      "config_file": {
+        "default": null,
+        "label": "Computation configuration json(Will override the config below):",
+        "type": "string",
         "source": "owner",
         "group": "Computation",
-        "conditional": {
-          "variable": "agg_engine",
-          "value": "rankDAD"
-        },
         "order": 23
-      },
-      "powerSGD_args": {
-        "default": {
-          "matrix_approximation_rank": 1,
-          "start_powerSGD_iter": 10,
-          "use_error_feedback": true,
-          "warm_start": true
-        },
-        "label": "PowerSGD engine parameters.",
-        "type": "object",
-        "source": "owner",
-        "group": "Computation",
-        "conditional": {
-          "variable": "agg_engine",
-          "value": "powerSGD"
-        },
-        "order": 24
       },
       "FS-Classification_args": {
         "default": {
+          "labels_file": "<Required>",
+          "data_column": "freesurferfile",
           "labels_column": "isControl",
           "input_size": 66,
           "hidden_sizes": [
@@ -288,6 +284,9 @@
             32
           ],
           "num_class": 2,
+          "monitor_metric": "auc",
+          "metric_direction": "maximize",
+          "log_header": "Loss|AUC",
           "split_files": []
         },
         "label": "FreeSurfer classification parameters.",
@@ -298,7 +297,7 @@
           "variable": "task_id",
           "value": "FS-Classification"
         },
-        "order": 25
+        "order": 24
       },
       "ICA-Classification_args": {
         "default": {

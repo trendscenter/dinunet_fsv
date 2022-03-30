@@ -87,9 +87,6 @@ class ICATrainer(COINNTrainer):
 
         return {'out': prob, 'loss': loss, 'averages': val, 'metrics': score}
 
-    def new_metrics(self):
-        return AUCROCMetrics()
-
 
 class ICADataHandle(COINNDataHandle):
     def list_files(self):

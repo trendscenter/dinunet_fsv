@@ -30,9 +30,10 @@ def run(data):
 
     local = COINNLocal(
         task_id=computation, agg_engine=agg_engine,
-        cache=CACHE, input=data['input'], batch_size=16,
-        state=data['state'], epochs=11, patience=31, split_ratio=[0.8, 0.1, 0.1],
-        pretrain_args=None, dataloader_args=dataloader_args
+        cache=CACHE, input=data['input'], batch_size=32,
+        state=data['state'], epochs=11, patience=31, split_ratio=[0.7, 0.15, 0.15],
+        pretrain_args=None, dataloader_args=dataloader_args,
+        num_class=2, monitor_metric='auc', log_header="loss|auc"
     )
 
     """Add new NN computation Here"""
