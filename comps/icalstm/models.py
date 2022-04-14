@@ -69,11 +69,11 @@ class LSTM(nn.Module):
 class ENcoder(nn.Module):
 
     def __init__(self,
-                 input_size=53,
+                 input_size=20,
                  hidden_size=256,
                  bidirectional=True,
                  z=256,
-                 seq_len=20):
+                 seq_len=53):
         super().__init__()
 
         self.input_size = input_size
@@ -121,8 +121,8 @@ class ICALstm(nn.Module):
         self.num_comp = num_comps
         self.window_size = window_size
 
-        # 32 * 13 * 20 * 53
-        self.encoder = ENcoder(input_size=num_comps, hidden_size=hidden_size, seq_len=window_size, z=input_size)
+        # 32 * 13 * 53 * 20
+        self.encoder = ENcoder(input_size=window_size, hidden_size=hidden_size // 2, seq_len=num_comps, z=input_size)
         self.lstm = LSTM(
             input_size=input_size,
             hidden_size=hidden_size,
@@ -142,3 +142,8 @@ class ICALstm(nn.Module):
         x = torch.stack([self.encoder(b)[0] for b in x], 0)
         o, h = self.lstm(x)
         return self.classifier(o.flatten(1)), h
+
+# i = torch.randn(13, 53, 20)
+# m = ENcoder(input_size=20, seq_len=53)
+# o = m(i)
+# print(o[0].shape)
