@@ -100,8 +100,6 @@ class ICALstm(nn.Module):
             nn.Linear(256, num_cls)
         )
 
-        torch.manual_seed(1)
-
     def forward(self, x):
         """Encode to low dim first"""
         x = torch.stack([self.encoder(b.view(b.shape[0], -1)) for b in x])
