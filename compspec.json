@@ -256,7 +256,7 @@
         "order": 21
       },
       "num_folds": {
-        "default": null,
+        "default": 0,
         "label": "Number of folds for K-Fold Cross Validation(Mutually exclusive with split ratio):",
         "type": "number",
         "source": "owner",
@@ -264,7 +264,7 @@
         "order": 22
       },
       "config_file": {
-        "default": null,
+        "default": "",
         "label": "Computation configuration json(Will override the config below):",
         "type": "string",
         "source": "owner",
