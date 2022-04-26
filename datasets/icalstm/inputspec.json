@@ -1,0 +1,88 @@
+[
+  {
+    "mode": {
+      "value": "train"
+    },
+    "gpus": {
+      "value": [
+        0
+      ]
+    },
+    "num_class": {
+      "value": 2
+    },
+    "num_workers": {
+      "value": 2
+    },
+    "learning_rate": {
+      "value": 0.001
+    },
+    "data_file": {
+      "value": "HCP_AllData_sess1.npz"
+    },
+    "labels_file": {
+      "value": "S2_1.csv"
+    },
+    "input_size": {
+      "value": 256
+    },
+    "hidden_size": {
+      "value": 348
+    },
+    "window_size": {
+      "value": 10
+    },
+    "window_stride": {
+      "value": 10
+    },
+    "temporal_size": {
+      "value": 980
+    },
+    "num_components": {
+      "value": 100
+    }
+  },
+  {
+    "mode": {
+      "value": "train"
+    },
+    "gpus": {
+      "value": [
+        1
+      ]
+    },
+    "num_class": {
+      "value": 2
+    },
+    "num_workers": {
+      "value": 2
+    },
+    "learning_rate": {
+      "value": 0.001
+    },
+    "input_size": {
+      "value": 256
+    },
+    "hidden_size": {
+      "value": 348
+    },
+    "window_size": {
+      "value": 10
+    },
+    "window_stride": {
+      "value": 10
+    },
+    "temporal_size": {
+      "value": 980
+    },
+    "num_components": {
+      "value": 100
+    },
+    "data_file": {
+      "value": "HCP_AllData_sess1.npz"
+    },
+    "labels_file": {
+      "value": "S2_2.csv"
+    }
+  }
+]
