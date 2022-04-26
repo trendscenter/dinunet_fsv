@@ -74,12 +74,12 @@ class ICALstm(nn.Module):
                  bidirectional=True,
                  num_cls=2,
                  num_comps=53,
-                 window_size=20):
+                 window_size=20,
+                 num_layers=1):
         super().__init__()
 
         self.input_size = input_size
         self.hidden_size = hidden_size
-        self.num_layers = 1
 
         self.num_comp = num_comps
         self.window_size = window_size
@@ -89,7 +89,7 @@ class ICALstm(nn.Module):
             input_size=input_size,
             hidden_size=hidden_size,
             bidirectional=bidirectional,
-            num_layers=1
+            num_layers=num_layers
         )
 
         self.classifier = nn.Sequential(

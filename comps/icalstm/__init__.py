@@ -48,7 +48,9 @@ class ICATrainer(COINNTrainer):
             input_size=self.cache['input_size'],  # 256
             hidden_size=self.cache['hidden_size'],  # 384
             num_comps=self.cache['num_components'],  # 100
-            num_cls=self.cache['num_class']
+            num_cls=self.cache['num_class'],
+            num_layers=self.cache.setdefault('num_layers', 1),
+            bidirectional=self.cache.setdefault('bidirectional', True)
         )
 
     def iteration(self, batch):
