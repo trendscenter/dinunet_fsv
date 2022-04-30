@@ -30,7 +30,8 @@
         "extensions": [
           "csv",
           "txt",
-          "h5",
+          "npy",
+          "npz",
           "json"
         ],
         "source": "member",
@@ -147,7 +148,7 @@
         "order": 11
       },
       "epochs": {
-        "default": 101,
+        "default": 51,
         "label": "Epochs:",
         "type": "number",
         "source": "owner",
@@ -232,7 +233,7 @@
         "order": 19
       },
       "patience": {
-        "default": 35,
+        "default": 51,
         "label": "Early stopping patience epochs:",
         "type": "number",
         "source": "owner",
@@ -263,19 +264,8 @@
         "group": "NN Params",
         "order": 22
       },
-      "config_file": {
-        "default": "",
-        "label": "Computation configuration json(Will override the config below):",
-        "type": "string",
-        "source": "owner",
-        "group": "Computation",
-        "order": 23
-      },
       "FS-Classification_args": {
         "default": {
-          "labels_file": "<Required>",
-          "data_column": "freesurferfile",
-          "labels_column": "isControl",
           "input_size": 66,
           "hidden_sizes": [
             256,
@@ -297,11 +287,27 @@
           "variable": "task_id",
           "value": "FS-Classification"
         },
+        "order": 23
+      },
+      "FS-Classification_data_conf": {
+        "default": {
+          "labels_file": "covariates.csv",
+          "data_column": "freesurferfile",
+          "labels_column": "isControl"
+        },
+        "label": "FreeSurfer classification data config.",
+        "type": "object",
+        "source": "member",
+        "group": "Computation",
+        "conditional": {
+          "variable": "task_id",
+          "value": "FS-Classification"
+        },
         "order": 24
       },
       "ICA-Classification_args": {
         "default": {
-          "num_class": 2,
+         "num_class": 2,
           "monitor_metric": "auc",
           "metric_direction": "maximize",
           "log_header": "Loss|AUC",
@@ -309,8 +315,6 @@
           "temporal_size": 980,
           "window_size": 10,
           "window_stride": 10,
-          "data_file": "<Required!>",
-          "labels_file": "<Required!>",
           "split_files": [],
           "input_size": 256,
           "hidden_size": 384
@@ -323,7 +327,22 @@
           "value": "ICA-Classification"
         },
         "group": "Computation",
-        "order": 26
+        "order": 27
+      },
+      "ICA-Classification_data_conf": {
+        "default": {
+          "data_file": "data.npz",
+          "labels_file": "labels.csv"
+        },
+        "label": "ICA classification data config.",
+        "type": "object",
+        "source": "member",
+        "conditional": {
+          "variable": "task_id",
+          "value": "ICA-Classification"
+        },
+        "group": "Computation",
+        "order": 28
       }
     },
     "output": {

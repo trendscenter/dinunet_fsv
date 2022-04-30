@@ -9,7 +9,7 @@ from comps import NNComputation, FreeSurferDataset, FreeSurferTrainer, FSVDataHa
 from comps import ICATrainer, ICADataset, ICADataHandle
 
 """ Test """
-computation = NNComputation.TASK_ICA
+computation = NNComputation.TASK_FREE_SURFER
 agg_engine = AggEngine.DECENTRALIZED_SGD
 
 CACHE = {}
